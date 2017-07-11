@@ -99,7 +99,7 @@ return [
     // 域名根，如thinkphp.cn
     'url_domain_root'        => '',
     // 是否自动转换URL中的控制器和操作名
-    'url_convert'            => true,
+    'url_convert'            => false,
     // 默认的访问控制器层
     'url_controller_layer'   => 'controller',
     // 表单请求类型伪装变量
@@ -235,8 +235,14 @@ return [
         'list_rows' => 15,
     ],
     
-    //个人新增配置
-    '__JS__' => '/CrabCMS/public/static/js/',
-    '__CSS__' => '/CrabCMS/public/static/css/',
-    '__IMG__' => '/CrabCMS/public/static/images/'
+    //**个人新增配置**//
+    '__JS__'   => '/CrabCMS/public/static/js/',
+    '__CSS__'  => '/CrabCMS/public/static/css/',
+    '__IMG__'  => '/CrabCMS/public/static/images/',
+    
+    'http_exception_template'    =>  [
+    // 定义404错误的重定向页面地址
+    404 =>  APP_PATH.'404.html'
+]
+    //**到此为止，为个人新增配置**//
 ];

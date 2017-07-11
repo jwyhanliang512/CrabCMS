@@ -3,7 +3,7 @@ namespace app\index\controller;
 use think\Controller;
 use think\Db;
 
-use app\common\functions\ComFunciton as comFunc;
+use app\common\functions\ComFunciton as ComFunc;
 
 
 class Index extends controller
@@ -14,21 +14,10 @@ class Index extends controller
 //     */
 //    public function _initialize()
 //    {
-//        $common = new comFunc();
+//        $common = new ComFunc();
 //        $common -> checkUserSession();
 //    }
     
-    /**
-     * 是否处于已登录状态判断
-     * 这个函数只在Index.php使用，其他类里使用 _initialize()
-     */
-    public function check_session_username()
-    {
-        $sessionName = session('crabstudio_session_username');
-        if(empty($sessionName)){
-            $this->redirect(url('index/index/index/login'));
-        }
-    }
     
     /**
      * 初始化整个项目
@@ -57,6 +46,7 @@ class Index extends controller
                 //校验密码
                 if($useInfo['password']===$_POST['password']){
                     session('crabstudio_session_username',$_POST['username']);
+                    session('crabstudio_session_userid',$useInfo['objectid']);
                     $this->redirect(url('/admin/index/index'));
                 }else{
                     $flag = 1;
@@ -89,7 +79,7 @@ class Index extends controller
             if($useInfo){
                 //校验邮箱,注意统一为大写比较
                 if(strtoupper($useInfo['email']) === strtoupper($_POST['email'])){
-                    $common = new comFunc();
+                    $common = new ComFunc();
                     if($common -> sendEmail($_POST['email'], $_POST['username'], "密码取回 —— Crab Studio", '尊敬的客户，您好！您的【'.$_POST['username'].'】账号密码为【'.$useInfo['password'].'】,请您妥善保管注意泄露！ ')){
                         return $this->fetch('login',[ 'flag'  => 3 ]);
                     }else{

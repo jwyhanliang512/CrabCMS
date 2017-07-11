@@ -3,11 +3,9 @@
 namespace app\admin\controller;
 
 use think\Controller;
-
 use app\common\functions\ComFunciton as ComFunc;
-use app\error\controller\Error as Error;
 
-class Index extends Controller
+class DeviceGatewayManage extends Controller
 {
     
     /**
@@ -24,9 +22,10 @@ class Index extends Controller
      * 初始化主界面
      * @return type
      */
-    public function index()
-    {
+    public function index() {
         $username = session('crabstudio_session_username');
         return $this->fetch('index',[ 'username'  => $username ]);
     }
+    
+ 
 }
