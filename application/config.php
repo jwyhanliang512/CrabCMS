@@ -241,8 +241,9 @@ return [
     '__IMG__'  => '/CrabCMS/public/static/images/',
     
     'http_exception_template'    =>  [
-    // 定义404错误的重定向页面地址
-    404 =>  APP_PATH.'404.html'
-]
+        // 定义404错误的重定向页面地址
+        404 =>  APP_PATH.'404.html'
+    ]
     //**到此为止，为个人新增配置**//
+    
 ];

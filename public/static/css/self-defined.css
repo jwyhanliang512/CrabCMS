@@ -9,3 +9,50 @@
 .hide_box h4 a{width:14px;line-height:13px;_line-height:15px;height:13px;font-family:arial;overflow:hidden;display:block;background:#fff;color:#c77405;float:right;text-align:center;text-decoration:none;margin-top:7px;font-size:14px;font-weight:normal;border-radius:2px;_font-size:12px;}
 .hide_box p{padding:30px 10px;font-size:13px;border:1px solid #ccc;text-align: center}
 
+/*表格样式*/
+.plugin-action{
+    display: inline-block;
+    color: steelblue;
+    margin-right: 10px;
+    cursor: pointer;
+}
+.plugin-action:hover{
+    text-decoration:underline;
+}
+.search-area{
+        padding: 10px 20px;
+        border: 1px solid #ccc;
+        background: #efefef;
+}
+.search-area .sa-ele{
+        display: inline-block;
+        margin-right: 20px;
+        font-size: 12px;
+}
+.search-area .sa-ele .se-title{
+        display: inline-block;
+        margin-right: 10px;
+}
+.search-area .sa-ele .se-con{
+        display: inline-block;
+        width:80px;
+        height: 24px;
+        border: 1px solid #ccc;
+        padding: 0px 4px;
+        line-height: 24px;
+}
+.search-area .sa-ele .search-action, .search-area .sa-ele .reset-action{
+        display: inline-block;
+        width:80px;
+        height: 26px;
+        border: 1px solid #ccc;
+        background: #e8e8e8;
+        padding: 0px 4px;
+        line-height: 26px;
+        text-align: center;
+        cursor: pointer;
+        margin-right: 10px;
+}
+.search-area .sa-ele .search-action:hover, .search-area .sa-ele .reset-action:hover{
+        opacity: 0.7;
+}

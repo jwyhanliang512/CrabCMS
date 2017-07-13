@@ -4,17 +4,12 @@
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
             <file>file:/C:/wamp/www/CrabCMS/application/admin/controller/DeviceGatewayManage.php</file>
-            <file>file:/C:/wamp/www/CrabCMS/application/config.php</file>
-            <file>file:/C:/wamp/www/CrabCMS/application/admin/controller/SystemUserManage.php</file>
-            <file>file:/C:/wamp/www/CrabCMS/application/common/functions/ComFunciton.php</file>
-            <file>file:/C:/wamp/www/CrabCMS/application/index/controller/Index.php</file>
-            <file>file:/C:/wamp/www/CrabCMS/application/admin/view/device_ms_manage/index.html</file>
-            <file>file:/C:/wamp/www/CrabCMS/application/admin/controller/Index.php</file>
+            <file>file:/C:/wamp/www/CrabCMS/public/static/css/GridManager.css</file>
+            <file>file:/C:/wamp/www/CrabCMS/application/common/html/top.html</file>
+            <file>file:/C:/wamp/www/CrabCMS/public/static/js/GridManager.js</file>
+            <file>file:/C:/wamp/www/CrabCMS/public/static/css/self-defined.css</file>
             <file>file:/C:/wamp/www/CrabCMS/application/admin/controller/DeviceMsManage.php</file>
-            <file>file:/C:/wamp/www/CrabCMS/application/admin/view/device_gateway_manage/index.html</file>
-            <file>file:/C:/wamp/www/CrabCMS/application/common/html/sidebar.html</file>
             <file>file:/C:/wamp/www/CrabCMS/application/admin/view/system_user_manage/index.html</file>
-            <file>file:/C:/wamp/www/CrabCMS/application/admin/view/index/index.html</file>
         </group>
     </open-files>
 </project-private>
