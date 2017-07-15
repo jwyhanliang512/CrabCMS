@@ -235,15 +235,24 @@ return [
         'list_rows' => 15,
     ],
     
-    //**个人新增配置**//
+    //*******个人新增配置*******//
+    //定义公共文件路径
     '__JS__'   => '/CrabCMS/public/static/js/',
     '__CSS__'  => '/CrabCMS/public/static/css/',
     '__IMG__'  => '/CrabCMS/public/static/images/',
     
+    //url不正确或者返回404的自定义页面
     'http_exception_template'    =>  [
         // 定义404错误的重定向页面地址
         404 =>  APP_PATH.'404.html'
+    ],
+    
+    //单独生成error 和 sql两个类型的日志文件,主日志文件中将不再包含这两个级别的日志信息
+    'log'   => [
+        'type'          => 'file', 
+        // error和sql日志单独记录
+        'apart_level'   =>  ['error','sql'],
     ]
-    //**到此为止，为个人新增配置**//
+    //*******到此为止，为个人新增配置*******//
     
 ];

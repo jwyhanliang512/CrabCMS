@@ -47,7 +47,8 @@ class Index extends controller
                 if($useInfo['password']===$_POST['password']){
                     session('crabstudio_session_username',$_POST['username']);
                     session('crabstudio_session_userid',$useInfo['objectid']);
-                    $this->redirect(url('/admin/index/index'));
+                    $global_user ->where('username',$_POST['username']) ->update(['lastlogintime' => date("Y-m-d H:i:s")]);
+                    $this->redirect(url('/admin/index/index'));             
                 }else{
                     $flag = 1;
                 }

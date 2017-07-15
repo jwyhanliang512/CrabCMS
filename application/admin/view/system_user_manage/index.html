@@ -32,16 +32,12 @@
 		<footer>
                     <div class="search-area">
                             <div class="sa-ele">
-                                    <label class="se-title">名称:</label>
-                                    <input class="se-con" name="name"/>
+                                    <label class="se-title">用户名:</label>
+                                    <input class="se-con" name="username"/>
                             </div>
                             <div class="sa-ele">
-                                    <label class="se-title">使用说明:</label>
-                                    <input class="se-con" name="info"/>
-                            </div>
-                            <div class="sa-ele">
-                                    <label class="se-title">url:</label>
-                                    <input class="se-con" name="url"/>
+                                    <label class="se-title">联系号码:</label>
+                                    <input class="se-con" name="linkphone"/>
                             </div>
                             <div class="sa-ele">
                                     <button class="search-action">搜索</button>
@@ -78,131 +74,111 @@
 		,supportAjaxPage:true
 		,supportSorting: true
 		,disableCache: false
-		,ajax_url: 'http://www.lovejavascript.com/learnLinkManager/getLearnLinkList'
+		,ajax_url: "{:url('admin/SystemUserManage/get_user_list')}"
+//                ,ajax_data : userList
 		,ajax_type: 'POST'
 		,query: {pluginId: 1}
-//		,textAlign: 'center'
+		,textAlign: 'center'
 		,pageSize:30
-		,columnData: [{
-				key: 'name',
-				remind: 'the name',
+		,columnData: [
+                        {
+				key: 'username',
 				width: '100px',
-				text: '名称',
+				text: '用户名',
 				sorting: ''
 			},{
-				key: 'info',
-				remind: 'the info',
-				text: '使用说明'
+				key: 'linkphone',
+                                width: '110px',
+				text: '联系号码'
 			},{
-				key: 'url',
-				remind: 'the url',
-				text: 'url'
+				key: 'email',
+                                width: '170px',
+				text: '邮箱'
 			},{
-				key: 'createDate',
-				remind: 'the createDate',
-				width: '100px',
+				key: 'lastlogintime',
+				width: '130px',
+				text: '最后登录时间',
+				sorting: ''
+			},{
+				key: 'createman',
+				width: '90px',
+				text: '创建人'
+			},{
+				key: 'createtime',
+                                width: '130px',
 				text: '创建时间',
-				sorting: 'DESC',
-				template: function(createDate, rowObject){
-					return new Date(createDate).format('YYYY-MM-DD HH:mm:ss');
-				}
+				sorting: ''
 			},{
-				key: 'lastDate',
-				remind: 'the lastDate',
-				width: '100px',
-				text: '最后修改时间',
-				sorting: '',
-				template: function(lastDate, rowObject){
-					return new Date(lastDate).format('YYYY-MM-DD HH:mm:ss');
-				}
+				key: 'modifyman',
+                                width: '90px',
+				text: '修改人'
+			},{
+				key: 'modifytime',
+				width: '130px',
+				text: '修改时间',
+				sorting: ''
 			},{
 				key: 'action',
 				remind: 'the action',
 				width: '10%',
 				text: '操作',
 				template: function(action, rowObject){
-					return '<span class="plugin-action edit-action" learnLink-id="'+rowObject.id+'">编辑</span>'
-							+'<span class="plugin-action del-action" learnLink-id="'+rowObject.id+'">删除</span>';
+                                    console.log(rowObject);
+					return "<a href='{:url('admin/SystemUserManage/edit_user/"+rowObject.objectid+"')}'><span class='plugin-action edit-action' learnLink-id='"+rowObject.id+"' >编辑</span></a>"
+							+"<span class='plugin-action edit-action' learnLink-id='"+rowObject.objectid+"'>删除</span>";
 				}
 			}
 		]
 		// 分页前事件
 		,pagingBefore: function(query){
-			console.log('pagingBefore', query);
+//			console.log('pagingBefore', query);
 		}
 		// 分页后事件
 		,pagingAfter: function(data){
-			console.log('pagingAfter', data);
+//			console.log('pagingAfter', data);
 		}
 		// 排序前事件
 		,sortingBefore: function (data) {
-			console.log('sortBefore', data);
+//			console.log('sortBefore', data);
 		}
 		// 排序后事件
 		,sortingAfter: function (data) {
-			console.log('sortAfter', data);
+//			console.log('sortAfter', data);
 		}
 		// 宽度调整前事件
 		,adjustBefore: function (event) {
-			console.log('adjustBefore', event);
+//			console.log('adjustBefore', event);
 		}
 		// 宽度调整后事件
 		,adjustAfter: function (event) {
-			console.log('adjustAfter', event);
+//			console.log('adjustAfter', event);
 		}
 		// 拖拽前事件
 		,dragBefore: function (event) {
-			console.log('dragBefore', event);
+//			console.log('dragBefore', event);
 		}
 		// 拖拽后事件
 		,dragAfter: function (event) {
-			console.log('dragAfter', event);
+//			console.log('dragAfter', event);
 		}
 	}, function(query){
 		// 渲染完成后的回调函数
-		console.log('渲染完成后的回调函数:', query);
+		
 	});
-
-	console.log('GirdManger version => ', TGM.version)
-	// 日期格式化,不是插件的代码,只用于处理时间格式化
-	Date.prototype.format = function(fmt){
-		var o = {
-			"M+": this.getMonth() + 1, //月份
-			"D+": this.getDate(), //日
-			"d+": this.getDate(), //日
-			"H+": this.getHours(), //小时
-			"h+": this.getHours(), //小时
-			"m+": this.getMinutes(), //分
-			"s+": this.getSeconds(), //秒
-			"q+": Math.floor((this.getMonth() + 3) / 3), //季度
-			"S": this.getMilliseconds() //毫秒
-		};
-		if (/([Y,y]+)/.test(fmt)){
-			fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
-		}
-		for (var k in o){
-			if(new RegExp("(" + k + ")").test(fmt)){
-				fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
-			}
-		}
-		return fmt;
-	};
 
 	// 绑定搜索事件
 	document.querySelector('.search-action').addEventListener('click', function () {
 		var _query = {
-			name: document.querySelector('[name="name"]').value,
-			info: document.querySelector('[name="info"]').value,
-			url: document.querySelector('[name="url"]').value
+			username: document.querySelector('[name="username"]').value,
+			linkphone: document.querySelector('[name="linkphone"]').value
 		};
 		table.GM('setQuery', _query);
 	});
 
 	// 绑定重置
 	document.querySelector('.reset-action').addEventListener('click', function () {
-		document.querySelector('[name="name"]').value = '';
-		document.querySelector('[name="info"]').value = '';
-		document.querySelector('[name="url"]').value = '';
+		document.querySelector('[name="username"]').value = '';
+		document.querySelector('[name="linkphone"]').value = '';
 	});
 </script>
 </body>
