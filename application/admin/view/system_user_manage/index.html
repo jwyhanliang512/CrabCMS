@@ -16,8 +16,11 @@
 <link href="{$Think.config.__CSS__}custom.min.css" rel="stylesheet">
 <!--GridManager-->
 <link rel="stylesheet" type="text/css" href="{$Think.config.__CSS__}GridManager.css">
+
+<link rel="stylesheet" type="text/css" href="{$Think.config.__CSS__}bootstrapValidator.css">
 <!--自己添加的样式-->
 <link href="{$Think.config.__CSS__}self-defined.css" rel="stylesheet">
+
 </head>
 <body class="nav-md">
 <div class="container body">
@@ -28,7 +31,7 @@
 		<!-- top navigation -->
                 {include file="../application/common/html/top.html" /}
                 <!-- /top navigation -->
-		<!-- footer content -->
+                <!-- footer content -->
 		<footer>
                     <div class="search-area">
                             <div class="sa-ele">
@@ -45,13 +48,128 @@
                             </div>
                     </div>
                     <br/>
+                    <button class="btn btn-default btn-sm" onclick="addUser()"><i class="fa fa-plus"></i> 新增</button>
                     <table></table>
                     <div class="clearfix">
                     </div>
 		</footer>
-		<!-- /footer content -->
+                <!-- /footer content -->
+                <!-- edit user -->
+                <div class="editUserDiv" id="editUserDiv"> 
+                        <h4><a href="javascript:void(0)" title="关闭窗口" onclick="closeTip()">&times;</a>编辑用户</h4> 
+                        <div class="row">
+                                <div class="col-md-12 col-sm-12 col-xs-12">
+                                        <div class="x_panel">
+                                                <div class="x_content">
+                                                        <br/>
+                                                        <form data-parsley-validate class="form-horizontal form-label-left" action="{:url('SystemUserManage/edit_user')}" method="POST">
+                                                                <div class="form-group">
+                                                                        <label class="control-label col-md-3 col-sm-3 col-xs-12" >用户名<span class="required">*</span></label>
+                                                                        <div class="col-md-6 col-sm-6 col-xs-12">
+                                                                                <input type="text"  id="edit_username" name="username" required="required" class="form-control col-md-7 col-xs-12">
+                                                                        </div>
+                                                                </div>
+                                                                <div class="form-group">
+                                                                        <label class="control-label col-md-3 col-sm-3 col-xs-12" >密码<span class="required">*</span></label>
+                                                                        <div class="col-md-6 col-sm-6 col-xs-12">
+                                                                                <input type="text"  id="edit_password" name="password" required="required" class="form-control col-md-7 col-xs-12">
+                                                                        </div>
+                                                                </div>
+                                                                <div class="form-group">
+                                                                        <label class="control-label col-md-3 col-sm-3 col-xs-12" >联系号码<span class="required">*</span></label>
+                                                                        <div class="col-md-6 col-sm-6 col-xs-12">
+                                                                                <input type="text"  id="edit_linkphone" name="linkphone" required="required" class="form-control col-md-7 col-xs-12">
+                                                                        </div>
+                                                                </div>
+                                                                <div class="form-group">
+                                                                        <label class="control-label col-md-3 col-sm-3 col-xs-12">邮箱<span class="required">*</span></label>
+                                                                        <div class="col-md-6 col-sm-6 col-xs-12">
+                                                                                <input type="text"  id="edit_email" name="email" required="required" class="form-control col-md-7 col-xs-12">
+                                                                        </div>
+                                                                </div>
+                                                                <div class="ln_solid">
+                                                                </div>
+                                                                <div class="form-group">
+                                                                        <div class="editUserForm-button">
+                                                                                <button class="btn btn-default" type="reset">重置</button>
+                                                                                <button class="btn btn-default" type="submit">确定</button>
+                                                                        </div>
+                                                                </div>
+                                                        </form>
+                                                </div>
+                                        </div>
+                                </div>
+                        </div> 
+                </div>
+                <!-- /edit user -->
+                <!-- add user -->
+                <div class="editUserDiv" id="addUserDiv"> 
+                        <h4><a href="javascript:void(0)" title="关闭窗口" onclick="closeTip()">&times;</a>新增用户</h4> 
+                        <div class="row">
+                                <div class="col-md-12 col-sm-12 col-xs-12">
+                                        <div class="x_panel">
+                                                <div class="x_content">
+                                                        <br/>
+                                                        <form id="addUserForm" data-parsley-validate class="form-horizontal form-label-left" action="{:url('SystemUserManage/add_user')}" method="POST">
+                                                                <div class="form-group">
+                                                                        <label class="control-label col-md-3 col-sm-3 col-xs-12" >用户名</label>
+                                                                        <div class="col-md-6 col-sm-6 col-xs-12">
+                                                                                <input type="text"  id="add_username" name="username" required="required" class="form-control col-md-7 col-xs-12">
+                                                                        </div>
+                                                                </div>
+                                                                <div class="form-group">
+                                                                        <label class="control-label col-md-3 col-sm-3 col-xs-12" >密码</label>
+                                                                        <div class="col-md-6 col-sm-6 col-xs-12">
+                                                                                <input type="text"  id="add_password" name="password" required="required" class="form-control col-md-7 col-xs-12">
+                                                                        </div>
+                                                                </div>
+                                                                <div class="form-group">
+                                                                        <label class="control-label col-md-3 col-sm-3 col-xs-12" >确认密码</label>
+                                                                        <div class="col-md-6 col-sm-6 col-xs-12">
+                                                                                <input type="text"  id="add_confirmPassword" name="confirmPassword" required="required" class="form-control col-md-7 col-xs-12">
+                                                                        </div>
+                                                                </div>
+                                                                <div class="form-group">
+                                                                        <label class="control-label col-md-3 col-sm-3 col-xs-12" >联系号码</label>
+                                                                        <div class="col-md-6 col-sm-6 col-xs-12">
+                                                                                <input type="text"  id="add_linkphone" name="linkphone" required="required" class="form-control col-md-7 col-xs-12">
+                                                                        </div>
+                                                                </div>
+                                                                <div class="form-group">
+                                                                        <label class="control-label col-md-3 col-sm-3 col-xs-12">邮箱</label>
+                                                                        <div class="col-md-6 col-sm-6 col-xs-12">
+                                                                                <input type="text"  id="add_email" name="email" required="required" class="form-control col-md-7 col-xs-12">
+                                                                        </div>
+                                                                </div>
+                                                                <div class="ln_solid">
+                                                                </div>
+                                                                <div class="form-group">
+                                                                        <div class="editUserForm-button">
+                                                                                <button class="btn btn-default" type="reset">重置</button>
+                                                                                <button class="btn btn-default" type="submit">确定</button>
+                                                                        </div>
+                                                                </div>
+                                                        </form>
+                                                </div>
+                                        </div>
+                                </div>
+                        </div> 
+                </div>
+                <!-- /add user -->
+                <div class="deleteUserDiv" id="deleteConfirmDiv"> 
+                        <h4><a href="javascript:void(0)" title="关闭窗口" onclick="closeTip()">&times;</a>提示</h4> 
+                        <p></p> 
+                        <input type="hidden" />
+                        <div class="deleteUserDiv-button">
+                                <button class="btn btn-default" type="reset"  onclick="confirmDeleteUser()">确定</button>
+                                <button class="btn btn-default" type="submit" onclick="closeTip()">取消</button>
+                        </div>
+                </div>
 	</div>
 </div>
+    
+    
+<!--注意文件引入的先后顺序,你应该先引入jquery再引入bootstrap-->
 <!-- jQuery -->
 <script src="{$Think.config.__JS__}jquery.min.js"></script>
 <!-- Bootstrap -->
@@ -64,6 +182,11 @@
 <script src="{$Think.config.__JS__}custom.min.js"></script>
 <!--GridManager-->
 <script src="{$Think.config.__JS__}GridManager.js"></script>
+<!--弹出层-->
+<script src="{$Think.config.__JS__}easydialog.min.js"></script>
+<!--bootstrao表单验证引入-->
+<script src="{$Think.config.__JS__}bootstrapValidator.js"></script>
+
 <script type="text/javascript">
 	var table = document.querySelector('table');
 	var TGM = table.GM({
@@ -123,9 +246,8 @@
 				width: '10%',
 				text: '操作',
 				template: function(action, rowObject){
-                                    console.log(rowObject);
-					return "<a href='{:url('admin/SystemUserManage/edit_user/"+rowObject.objectid+"')}'><span class='plugin-action edit-action' learnLink-id='"+rowObject.id+"' >编辑</span></a>"
-							+"<span class='plugin-action edit-action' learnLink-id='"+rowObject.objectid+"'>删除</span>";
+					return "<span class='plugin-action edit-action' learnLink-id='"+rowObject.objectid+"' onclick='editUser("+JSON.stringify(rowObject)+")'>编辑</span>"
+							+"<span class='plugin-action edit-action' learnLink-id='"+rowObject.objectid+"' onclick='deleteUser("+JSON.stringify(rowObject)+")'>删除</span>";
 				}
 			}
 		]
@@ -181,5 +303,171 @@
 		document.querySelector('[name="linkphone"]').value = '';
 	});
 </script>
+
+<script type="text/javascript">
+$(document).ready(function() {
+    $('#addUserForm')
+        .bootstrapValidator({
+            message: 'This value is not valid',
+            feedbackIcons: {
+                valid: 'glyphicon glyphicon-ok',
+                invalid: 'glyphicon glyphicon-remove',
+                validating: 'glyphicon glyphicon-refresh'
+            },
+            fields: {
+                username: {
+                    message: '用户名验证失败',
+                    validators: {
+                        notEmpty: {
+                            message: '用户名不能为空'
+                        },
+                        stringLength: {
+                            min: 6,
+                            max: 16,
+                            message: '用户名长度必须在6到16位之间'
+                        },
+                        regexp: {
+                            regexp: /^[a-zA-Z0-9_]+$/,
+                            message: '用户名只能包含大写、小写字母，数字和下划线'
+                        },
+                        callback: {
+                            message: '用户名已存在',
+                            callback: function (value, validator) {
+                                var flag = true;
+                                $.ajax({
+                                    type: 'POST',
+                                    async : false, // 注意此处需要同步,锁住浏览器，其它操作必须等待请求完成才可以执行
+                                    url: "{:url('admin/SystemUserManage/check_user_duplicate')}",
+                                    data: {
+                                        username: value   //
+                                    },
+                                    success: function(data){
+                                            if(data == 1){
+                                                flag = false;
+                                            }
+                                    }
+                                });
+                                return flag;
+                            }
+                        }
+                    }
+                },
+                password: {
+                    validators: {
+                        notEmpty: {
+                            message: '密码不能为空'
+                        },
+                        stringLength: {
+                            min: 6,
+                            max: 18,
+                            message: '密码必须在6到18位之间'
+                        },
+                        regexp: {
+                            regexp: /^[a-zA-Z0-9]+$/,
+                            message: '密码只能包含大写、小写字母，数字'
+                        },
+                        identical: {
+                            field: 'confirmPassword',
+                            message: '两次密码输入不一致'
+                        },
+                        different: {
+                            field: 'username',
+                            message: '密码不能为用户名'
+                        }
+                    }
+                },
+                confirmPassword: {
+                    validators: {
+                        notEmpty: {
+                            message: '确认密码不能为空'
+                        },
+                        identical: {
+                            field: 'password',
+                            message: '两次密码输入不一致'
+                        },
+                        different: {
+                            field: 'username',
+                            message: '密码不能为用户名'
+                        }
+                    }
+                },
+                linkphone: {
+                    validators: {
+                        notEmpty: {
+                            message: '联系号码不能为空'
+                        }
+                    }
+                },
+                email: {
+                    validators: {
+                        notEmpty: {
+                            message: '邮箱不能为空'
+                        },
+                        emailAddress: {
+                            message: '邮箱地址格式有误'
+                        }
+                    }
+                }
+            }
+        });
+        
+
+});
+</script>
+
+
+<script>
+    
+    function closeTip(){
+	easyDialog.close();
+    }
+    
+    function editUser(data){
+        document.getElementById("edit_username").value = data.username;
+        document.getElementById("edit_username").readOnly = true;
+        document.getElementById("edit_password").value = data.password;
+        document.getElementById("edit_linkphone").value = data.linkphone;
+        document.getElementById("edit_email").value = data.email;
+        easyDialog.open({
+            container : 'editUserDiv',
+            isOverlay : true
+        });
+    }
+    
+    function addUser(){
+        easyDialog.open({
+            container : 'addUserDiv',
+            isOverlay : true
+        });
+        //每次新增窗口弹出时，都清空表单并清除bootstrapValidator校验
+        document.getElementById("addUserForm").reset();
+        $('#addUserForm').data('bootstrapValidator').resetForm();
+    }
+    
+    function deleteUser(data){
+        easyDialog.open({
+            container : 'deleteConfirmDiv',
+            isOverlay : true
+        });
+        document.getElementById("deleteConfirmDiv").getElementsByTagName("p")[0].innerText = "删除用户【"+ data.username + "】?";
+        document.getElementById("deleteConfirmDiv").getElementsByTagName("input")[0].value = data.objectid;
+    }
+    
+    function confirmDeleteUser(){
+        $.ajax({
+            type: 'POST',
+            async : false, // 注意此处需要同步,锁住浏览器，其它操作必须等待请求完成才可以执行
+            url: "{:url('admin/SystemUserManage/delete_user')}",
+            data: {
+                userid : document.getElementById("deleteConfirmDiv").getElementsByTagName("input")[0].value  //
+            },
+            success: function(data){
+                window.location.reload();
+            }
+        });
+    }
+
+</script>
+
 </body>
 </html>

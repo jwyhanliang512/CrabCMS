@@ -47,6 +47,7 @@ class SystemUserManage extends Controller
         $s1 = " SELECT 
                     a.objectid,
                     a.username,
+                    a.password,
                     ifnull(a.linkphone,'') as linkphone,
                     ifnull(a.email,'') as email,
                     a.lastlogintime,
@@ -68,9 +69,89 @@ class SystemUserManage extends Controller
         return json($result);
     }
     
-    public function edit_user($id) {
-        print_r($id);
+    /**
+     * 编辑用户信息
+     */
+    public function edit_user() {
+        if(!empty($_POST)){
+            $userid = session('crabstudio_session_userid');
+            $global_user = db('global_user');
+            $res  = $global_user->where('username',$_POST['username']) 
+                                ->update([  'linkphone'     => $_POST['linkphone'],
+                                            'email'         => $_POST['email'],
+                                            'password'      => $_POST['password'],
+                                            'modifymanid'   => $userid,
+                                            'modifytime'    => date("Y-m-d H:i:s")]);
+            if($res){
+                $this->redirect(url('/admin/SystemUserManage/index'));
+            }
+        }else{
+            $this->redirect(url('/admin/SystemUserManage/index'));
+        }
     }
+    
+    /**
+     * 增加用户
+     */
+    public function add_user() {
+        if(!empty($_POST)){
+            $userid = session('crabstudio_session_userid');
+            $global_user = db('global_user');
+            $data = [   'username'      => $_POST['username'], 
+                        'password'      => $_POST['password'], 
+                        'linkphone'     => $_POST['linkphone'], 
+                        'email'         => $_POST['email'], 
+                        'createmanid'   => $userid,
+                        'createtime'    => date("Y-m-d H:i:s"),
+                        'modifymanid'   => $userid,
+                        'modifytime'    => date("Y-m-d H:i:s"),
+                    ];
+            $res  = $global_user-> insert($data);
+            if($res){
+                $this->redirect(url('/admin/SystemUserManage/index'));
+            }
+        }else{
+            $this->redirect(url('/admin/SystemUserManage/index'));
+        }
+    }
+    
+    /**
+     * 增加用户时校验用户名是否重复
+     * @return int
+     */
+    public function check_user_duplicate() {
+        if(!empty($_POST)){
+            $global_user = db('global_user');
+            $useInfo = $global_user->where('username',$_POST['username'])->find();
+            //校验用户名,重复返回1，不重复返回0
+            if($useInfo){
+                return 1;
+            }else{
+                return 0;
+            }
+        }
+    }
+    
+    
+    /**
+     * 删除用户
+     * @return int
+     */
+    public function delete_user() {
+        if(!empty($_POST)){
+            $global_user = db('global_user');
+            $res  = $global_user->where('objectid',$_POST['userid']) -> delete();
+            if($res){
+                return 1;
+            }else{
+                return 0;
+            }
+        }else{
+            $this->redirect(url('/admin/SystemUserManage/index'));
+        }
+    }
+    
+   
     
  
 }

@@ -3,7 +3,10 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
+            <file>file:/C:/wamp/www/CrabCMS/application/index/controller/Index.php</file>
             <file>file:/C:/wamp/www/CrabCMS/application/admin/controller/SystemUserManage.php</file>
+            <file>file:/C:/wamp/www/CrabCMS/public/static/css/self-defined.css</file>
+            <file>file:/C:/wamp/www/CrabCMS/application/index/view/index/login.html</file>
             <file>file:/C:/wamp/www/CrabCMS/application/admin/view/system_user_manage/index.html</file>
         </group>
     </open-files>

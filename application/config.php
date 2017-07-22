@@ -241,9 +241,8 @@ return [
     '__CSS__'  => '/CrabCMS/public/static/css/',
     '__IMG__'  => '/CrabCMS/public/static/images/',
     
-    //url不正确或者返回404的自定义页面
+    //HttpException异常
     'http_exception_template'    =>  [
-        // 定义404错误的重定向页面地址
         404 =>  APP_PATH.'404.html'
     ],
     
