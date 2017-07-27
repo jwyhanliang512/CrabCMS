@@ -26,7 +26,8 @@ class Index extends Controller
      */
     public function index()
     {
-        $username = session('crabstudio_session_username');
+        $common = new ComFunc();
+        $username = $common->authcode(session('crabstudio_session_username'), "DECODE", config('authcodeKey'), 0);
         return $this->fetch('index',[ 'username'  => $username ]);
     }
 }

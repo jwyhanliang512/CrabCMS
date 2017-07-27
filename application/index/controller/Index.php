@@ -45,8 +45,11 @@ class Index extends controller
             if($useInfo){
                 //校验密码
                 if($useInfo['password']===$_POST['password']){
-                    session('crabstudio_session_username',$_POST['username']);
-                    session('crabstudio_session_userid',$useInfo['objectid']);
+                    $common = new ComFunc();
+                    $sesson_username = $common ->authcode($_POST['username'], "ENCODE", config('authcodeKey'), 0);
+                    $sesson_userid   = $common ->authcode($useInfo['objectid'], "ENCODE", config('authcodeKey'), 0);
+                    session('crabstudio_session_username',$sesson_username);
+                    session('crabstudio_session_userid',$sesson_userid);
                     $global_user ->where('username',$_POST['username']) ->update(['lastlogintime' => date("Y-m-d H:i:s")]);
                     $this->redirect(url('/admin/index/index'));             
                 }else{
@@ -71,6 +74,7 @@ class Index extends controller
     
     /**
      * 忘记密码
+     * @return type
      */
     public function forget_password() {
         if(!empty($_POST)){
@@ -81,7 +85,7 @@ class Index extends controller
                 //校验邮箱,注意统一为大写比较
                 if(strtoupper($useInfo['email']) === strtoupper($_POST['email'])){
                     $common = new ComFunc();
-                    if($common -> sendEmail($_POST['email'], $_POST['username'], "密码取回 —— Crab Studio", '尊敬的客户，您好！您的【'.$_POST['username'].'】账号密码为【'.$useInfo['password'].'】,请您妥善保管注意泄露！ ')){
+                    if($common -> sendEmail($_POST['email'], $_POST['username'], "密码取回 [ Crab Studio ]", '尊敬的客户，您好！您的【'.$_POST['username'].'】账号密码为【'.$useInfo['password'].'】,请您妥善保管注意泄露！ ')){
                         return $this->fetch('login',[ 'flag'  => 3 ]);
                     }else{
                         return $this->fetch('login',[ 'flag'  => 2 ]);

@@ -193,7 +193,7 @@
 		supportRemind: true
 		,gridManagerName: 'test'
 		,isCombSorting: true
-		,height: ( document.body.scrollHeight-170)+'px' //网页正文全文高 document.body.scrollHeight
+		,height: (document.documentElement.scrollHeight -200)+'px' //网页正文全文高 document.body.scrollHeight
 		,supportAjaxPage:true
 		,supportSorting: true
 		,disableCache: false
@@ -339,7 +339,7 @@ $(document).ready(function() {
                                     async : false, // 注意此处需要同步,锁住浏览器，其它操作必须等待请求完成才可以执行
                                     url: "{:url('admin/SystemUserManage/check_user_duplicate')}",
                                     data: {
-                                        username: value   //
+                                        username: value
                                     },
                                     success: function(data){
                                             if(data == 1){

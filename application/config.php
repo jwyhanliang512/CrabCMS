@@ -251,7 +251,10 @@ return [
         'type'          => 'file', 
         // error和sql日志单独记录
         'apart_level'   =>  ['error','sql'],
-    ]
+    ],
+    
+    //加解密的密钥
+    'authcodeKey' => "19971123"
     //*******到此为止，为个人新增配置*******//
     
 ];
