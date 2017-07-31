@@ -1,24 +1,13 @@
 <?php
 
-namespace app\admin\controller;
+namespace app\admin\controller\systemmanage;
 
-use think\Controller;
 use think\Db;
-
+use app\admin\controller\Index;
 use app\common\functions\ComFunciton as ComFunc;
 
-class SystemUserManage extends Controller
+class user extends Index
 {
-    
-    /**
-     * 控制器初始化，进行是否处于已登录状态判断
-     * 使用控制器初始化方法  _initialize
-     */
-    public function _initialize()
-    {
-        $common = new ComFunc();
-        $common -> checkUserSession();
-    }
     
     /**
      * 初始化主界面
@@ -85,10 +74,10 @@ class SystemUserManage extends Controller
                                             'modifymanid'   => $userid,
                                             'modifytime'    => date("Y-m-d H:i:s")]);
             if($res){
-                $this->redirect(url('/admin/SystemUserManage/index'));
+                $this->redirect(url('/admin/systemmanage.user/index'));
             }
         }else{
-            $this->redirect(url('/admin/SystemUserManage/index'));
+            $this->redirect(url('/admin/systemmanage.user/index'));
         }
     }
     
@@ -107,14 +96,37 @@ class SystemUserManage extends Controller
                         'createmanid'   => $userid,
                         'createtime'    => date("Y-m-d H:i:s"),
                         'modifymanid'   => $userid,
-                        'modifytime'    => date("Y-m-d H:i:s"),
+                        'modifytime'    => date("Y-m-d H:i:s")
                     ];
-            $res  = $global_user-> insert($data);
-            if($res){
-                $this->redirect(url('/admin/SystemUserManage/index'));
+            try{
+                $resObjectid  = $global_user-> insertGetId($data);
+            }catch(\Exception $e){
+                    abort(500, '新增用户异常');
+            }
+            if($resObjectid){
+                //根据返回的用户主键值，建立对应的数据表
+                try{
+                    $createDB1 = "SET FOREIGN_KEY_CHECKS=0;";
+                    Db::execute($createDB1);   
+                    $createDB2 = "DROP TABLE IF EXISTS `ms_data_history_"."$resObjectid`";
+                    Db::execute($createDB2);   
+                    $createDB3 = "CREATE TABLE `ms_data_history_".$resObjectid."` (
+                                   `objectid` bigint(20) NOT NULL AUTO_INCREMENT,
+                                    `uid` int(10) NOT NULL COMMENT '终端id标识',
+                                    `mstype` int(5) NOT NULL COMMENT '终端类型',
+                                    `rawdata` varchar(100) CHARACTER SET utf8 NOT NULL COMMENT '原始数据',
+                                    `parseddata` varchar(100) CHARACTER SET utf8 NOT NULL COMMENT '解析后的数据',
+                                    `uptime` datetime NOT NULL COMMENT '上报时间',
+                                    PRIMARY KEY (`objectid`)
+                                  ) ENGINE=InnoDB DEFAULT CHARSET=latin1;";
+                    Db::execute($createDB3);
+                }catch(\Exception $e){
+                    abort(500, '新增用户时新建历史数据表异常');
+                }
+                $this->redirect(url('/admin/systemmanage.user/index'));
             }
         }else{
-            $this->redirect(url('/admin/SystemUserManage/index'));
+            $this->redirect(url('/admin/systemmanage.user/index'));
         }
     }
     
@@ -145,12 +157,20 @@ class SystemUserManage extends Controller
             $global_user = db('global_user');
             $res  = $global_user->where('objectid',$_POST['userid']) -> delete();
             if($res){
+//                try{
+//                    $createDB1 = "SET FOREIGN_KEY_CHECKS=0;";
+//                    Db::execute($createDB1);   
+//                    $createDB2 = "DROP TABLE IF EXISTS `ms_data_history_"."{$_POST['userid']}`";
+//                    Db::execute($createDB2);   
+//                }catch(\Exception $e){
+//                    abort(500, '删除用户时删除对应历史数据表异常');
+//                }
                 return 1;
             }else{
                 return 0;
             }
         }else{
-            $this->redirect(url('/admin/SystemUserManage/index'));
+            $this->redirect(url('/admin/systemmanage.user/index'));
         }
     }
     

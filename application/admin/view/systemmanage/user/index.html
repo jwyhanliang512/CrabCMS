@@ -16,7 +16,7 @@
 <link href="{$Think.config.__CSS__}custom.min.css" rel="stylesheet">
 <!--GridManager-->
 <link rel="stylesheet" type="text/css" href="{$Think.config.__CSS__}GridManager.css">
-
+<!--bootstrapValidator校验样式-->
 <link rel="stylesheet" type="text/css" href="{$Think.config.__CSS__}bootstrapValidator.css">
 <!--自己添加的样式-->
 <link href="{$Think.config.__CSS__}self-defined.css" rel="stylesheet">
@@ -62,7 +62,7 @@
                                         <div class="x_panel">
                                                 <div class="x_content">
                                                         <br/>
-                                                        <form data-parsley-validate class="form-horizontal form-label-left" action="{:url('SystemUserManage/edit_user')}" method="POST">
+                                                        <form data-parsley-validate class="form-horizontal form-label-left" action="{:url('systemmanage.user/edit_user')}" method="POST">
                                                                 <div class="form-group">
                                                                         <label class="control-label col-md-3 col-sm-3 col-xs-12" >用户名<span class="required">*</span></label>
                                                                         <div class="col-md-6 col-sm-6 col-xs-12">
@@ -110,7 +110,7 @@
                                         <div class="x_panel">
                                                 <div class="x_content">
                                                         <br/>
-                                                        <form id="addUserForm" data-parsley-validate class="form-horizontal form-label-left" action="{:url('SystemUserManage/add_user')}" method="POST">
+                                                        <form id="addUserForm" data-parsley-validate class="form-horizontal form-label-left" action="{:url('systemmanage.user/add_user')}" method="POST">
                                                                 <div class="form-group">
                                                                         <label class="control-label col-md-3 col-sm-3 col-xs-12" >用户名</label>
                                                                         <div class="col-md-6 col-sm-6 col-xs-12">
@@ -167,9 +167,8 @@
                 </div>
 	</div>
 </div>
-    
-    
-<!--注意文件引入的先后顺序,你应该先引入jquery再引入bootstrap-->
+
+<!--注意文件引入的先后顺序,应该先引入jquery再引入bootstrap-->
 <!-- jQuery -->
 <script src="{$Think.config.__JS__}jquery.min.js"></script>
 <!-- Bootstrap -->
@@ -193,11 +192,11 @@
 		supportRemind: true
 		,gridManagerName: 'test'
 		,isCombSorting: true
-		,height: (document.documentElement.scrollHeight -200)+'px' //网页正文全文高 document.body.scrollHeight
-		,supportAjaxPage:true
+		,height: (document.documentElement.scrollHeight -200)+'px'
+                ,supportAjaxPage:true
 		,supportSorting: true
 		,disableCache: false
-		,ajax_url: "{:url('admin/SystemUserManage/get_user_list')}"
+		,ajax_url: "{:url('admin/systemmanage.user/get_user_list')}"
 //                ,ajax_data : userList
 		,ajax_type: 'POST'
 		,query: {pluginId: 1}
@@ -242,7 +241,7 @@
 				sorting: ''
 			},{
 				key: 'action',
-				remind: 'the action',
+//				remind: 'the action',
 				width: '10%',
 				text: '操作',
 				template: function(action, rowObject){
@@ -337,7 +336,7 @@ $(document).ready(function() {
                                 $.ajax({
                                     type: 'POST',
                                     async : false, // 注意此处需要同步,锁住浏览器，其它操作必须等待请求完成才可以执行
-                                    url: "{:url('admin/SystemUserManage/check_user_duplicate')}",
+                                    url: "{:url('admin/systemmanage.user/check_user_duplicate')}",
                                     data: {
                                         username: value
                                     },
@@ -457,7 +456,7 @@ $(document).ready(function() {
         $.ajax({
             type: 'POST',
             async : false, // 注意此处需要同步,锁住浏览器，其它操作必须等待请求完成才可以执行
-            url: "{:url('admin/SystemUserManage/delete_user')}",
+            url: "{:url('admin/systemmanage.user/delete_user')}",
             data: {
                 userid : document.getElementById("deleteConfirmDiv").getElementsByTagName("input")[0].value  //
             },

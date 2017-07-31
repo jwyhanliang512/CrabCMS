@@ -3,9 +3,8 @@
 namespace app\admin\controller;
 
 use think\Controller;
-
 use app\common\functions\ComFunciton as ComFunc;
-use app\error\controller\Error as Error;
+
 
 class Index extends Controller
 {

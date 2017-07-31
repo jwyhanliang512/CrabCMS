@@ -1,22 +1,13 @@
 <?php
 
-namespace app\admin\controller;
+namespace app\admin\controller\devicemanage;
 
-use think\Controller;
+use think\Db;
+use app\admin\controller\Index;
 use app\common\functions\ComFunciton as ComFunc;
 
-class DeviceGatewayManage extends Controller
+class Gateway extends Index
 {
-    
-    /**
-     * 控制器初始化，进行是否处于已登录状态判断
-     * 使用控制器初始化方法  _initialize
-     */
-    public function _initialize()
-    {
-        $common = new ComFunc();
-        $common -> checkUserSession();
-    }
     
     /**
      * 初始化主界面

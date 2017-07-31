@@ -243,7 +243,8 @@ return [
     
     //HttpException异常
     'http_exception_template'    =>  [
-        404 =>  APP_PATH.'404.html'
+        404 =>  APP_PATH.'404.html',
+        500 =>  APP_PATH.'500.html'
     ],
     
     //单独生成error 和 sql两个类型的日志文件,主日志文件中将不再包含这两个级别的日志信息

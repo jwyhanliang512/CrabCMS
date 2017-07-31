@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<!-- Meta, title, CSS, favicons, etc. -->
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="shortcut icon" href="{$Think.config.__IMG__}crabteam.jpg">
+<title>Crab Studio管理系统</title>
+<!-- Bootstrap -->
+<link href="{$Think.config.__CSS__}bootstrap.min.css" rel="stylesheet">
+<!-- Font Awesome -->
+<link href="{$Think.config.__CSS__}font-awesome.min.css" rel="stylesheet">
+<!-- Custom Theme Style -->
+<link href="{$Think.config.__CSS__}custom.min.css" rel="stylesheet">
+<!--GridManager-->
+<link rel="stylesheet" type="text/css" href="{$Think.config.__CSS__}GridManager.css">
+<!--bootstrapValidator校验样式-->
+<link rel="stylesheet" type="text/css" href="{$Think.config.__CSS__}bootstrapValidator.css">
+<!--自己添加的样式-->
+<link href="{$Think.config.__CSS__}self-defined.css" rel="stylesheet">
+</head>
+<body class="nav-md">
+<div class="container body">
+	<div class="main_container">
+		<!-- sidebar -->
+                {include file="../application/common/html/left.html" /}
+		<!-- /sidebar -->	
+		<!-- top navigation -->
+                {include file="../application/common/html/top.html" /}
+                <!-- /top navigation -->
+		<footer>
+                    <div class="search-area">
+                            <div class="sa-ele">
+                                    <label class="se-title">设备uid:</label>
+                                    <input class="se-con" name="msuid"/>
+                            </div>
+                            <div class="sa-ele">
+                                    <label class="se-title">所属用户:</label>
+                                    <input class="se-con" name="msusername"/>
+                            </div>
+                            <div class="sa-ele">
+                                    <label class="se-title">别名:</label>
+                                    <input class="se-con" name="msalias"/>
+                            </div>
+                            <div class="sa-ele">
+                                    <label class="se-title">地址:</label>
+                                    <input class="se-con" name="msaddr"/>
+                            </div>
+                            <div class="sa-ele">
+                                    <button class="search-action">搜索</button>
+                                    <button class="reset-action">重置</button>
+                            </div>
+                    </div>
+                    <br/>
+                    <button class="btn btn-default btn-sm" onclick="addMs()"><i class="fa fa-plus"></i> 新增</button>
+                    <table></table>
+                    <div class="clearfix">
+                    </div>
+		</footer>
+                <!-- /footer content -->
+	</div>
+</div>
+    
+<!--注意文件引入的先后顺序,应该先引入jquery再引入bootstrap-->
+<!-- jQuery -->
+<script src="{$Think.config.__JS__}jquery.min.js"></script>
+<!-- Bootstrap -->
+<script src="{$Think.config.__JS__}bootstrap.min.js"></script>
+<!-- FastClick -->
+<script src="{$Think.config.__JS__}fastclick.js"></script>
+<!-- Skycons -->
+<script src="{$Think.config.__JS__}skycons.js"></script>
+<!-- Custom Theme Scripts -->
+<script src="{$Think.config.__JS__}custom.min.js"></script>
+<!--GridManager-->
+<script src="{$Think.config.__JS__}GridManager.js"></script>
+<!--弹出层-->
+<script src="{$Think.config.__JS__}easydialog.min.js"></script>
+<!--bootstrao表单验证引入-->
+<script src="{$Think.config.__JS__}bootstrapValidator.js"></script>
+
+<script type="text/javascript">
+	var table = document.querySelector('table');
+	var TGM = table.GM({
+		supportRemind: true
+		,gridManagerName: 'test'
+		,isCombSorting: true
+		,height: (document.documentElement.scrollHeight -200)+'px'
+                ,supportAjaxPage:true
+		,supportSorting: true
+		,disableCache: false
+		,ajax_url: "{:url('admin/devicemanage.ms/get_ms_list')}"
+//                ,ajax_data : userList
+		,ajax_type: 'POST'
+		,query: {pluginId: 1}
+		,textAlign: 'center'
+		,pageSize:30
+		,columnData: [
+                        {
+				key: 'msuid',
+				width: '100px',
+				text: '设备uid',
+				sorting: ''
+			},{
+				key: 'msusername',
+                                width: '110px',
+				text: '所属用户',
+                                sorting: ''
+			},{
+				key: 'msalias',
+                                width: '170px',
+				text: '别名',
+                                sorting: ''
+			},{
+				key: 'msaddr',
+				width: '130px',
+				text: '地址',
+				sorting: ''
+			},{
+				key: 'modifyman',
+                                width: '90px',
+				text: '修改人'
+			},{
+				key: 'modifytime',
+				width: '130px',
+				text: '修改时间',
+				sorting: ''
+			},{
+				key: 'action',
+				width: '90px',
+				text: '操作',
+				template: function(action, rowObject){
+					return "<span class='plugin-action edit-action' learnLink-id='"+rowObject.objectid+"' onclick='editUser("+JSON.stringify(rowObject)+")'>编辑</span>"
+							+"<span class='plugin-action edit-action' learnLink-id='"+rowObject.objectid+"' onclick='deleteUser("+JSON.stringify(rowObject)+")'>删除</span>";
+				}
+			},{
+				key: 'controlword',
+				width: '10%',
+				text: '下行指令',
+				template: function(action, rowObject){
+					return "<select class='form-control' style='height:24px;'><option>111</option><option>222</option><option>333</option></select>";
+				}
+			}
+		]
+		// 分页前事件
+		,pagingBefore: function(query){
+//			console.log('pagingBefore', query);
+		}
+		// 分页后事件
+		,pagingAfter: function(data){
+//			console.log('pagingAfter', data);
+		}
+		// 排序前事件
+		,sortingBefore: function (data) {
+//			console.log('sortBefore', data);
+		}
+		// 排序后事件
+		,sortingAfter: function (data) {
+//			console.log('sortAfter', data);
+		}
+		// 宽度调整前事件
+		,adjustBefore: function (event) {
+//			console.log('adjustBefore', event);
+		}
+		// 宽度调整后事件
+		,adjustAfter: function (event) {
+//			console.log('adjustAfter', event);
+		}
+		// 拖拽前事件
+		,dragBefore: function (event) {
+//			console.log('dragBefore', event);
+		}
+		// 拖拽后事件
+		,dragAfter: function (event) {
+//			console.log('dragAfter', event);
+		}
+	}, function(query){
+		// 渲染完成后的回调函数
+		
+	});
+
+	// 绑定搜索事件
+	document.querySelector('.search-action').addEventListener('click', function () {
+		var _query = {
+			msuid: document.querySelector('[name="msuid"]').value,
+                        msaddr: document.querySelector('[name="msaddr"]').value,
+			msalias: document.querySelector('[name="msalias"]').value,
+                        msusername: document.querySelector('[name="msusername"]').value
+		};
+		table.GM('setQuery', _query);
+	});
+
+	// 绑定重置
+	document.querySelector('.reset-action').addEventListener('click', function () {
+		document.querySelector('[name="msuid"]').value = '';
+                document.querySelector('[name="msaddr"]').value = '';
+		document.querySelector('[name="msalias"]').value = '';
+                document.querySelector('[name="msusername"]').value = '';
+	});
+</script>
+</body>
+</html>
