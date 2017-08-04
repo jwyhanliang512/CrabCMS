@@ -6,7 +6,7 @@ use think\Db;
 use app\admin\controller\Index;
 use app\common\functions\ComFunciton as ComFunc;
 
-class User extends Index
+class Company extends Index
 {
     
     /**
@@ -38,8 +38,6 @@ class User extends Index
                     a.objectid,
                     a.username,
                     a.password,
-                    a.companyid,
-                    gcom.companyname,
                     ifnull(a.linkphone,'') as linkphone,
                     ifnull(a.email,'') as email,
                     a.lastlogintime,
@@ -51,7 +49,6 @@ class User extends Index
                     c.username as modifyman 
                 FROM 
                     global_user a
-                INNER JOIN global_company gcom ON a.companyid = gcom.objectid
                 INNER JOIN global_user b ON a.createmanid = b.objectid
                 INNER JOIN global_user c ON a.modifymanid = c.objectid
                 where $where ";
@@ -62,41 +59,69 @@ class User extends Index
         return json($result);
     }
     
-    public function add_edit_user() {
+    /**
+     * 编辑用户信息
+     */
+    public function edit_user() {
         if(!empty($_POST)){
             $common = new ComFunc();
             $userid = $common->authcode(session('crabstudio_session_userid'), "DECODE", config('authcodeKey'), 0);
             $global_user = db('global_user');
-            if($_POST['confirmPassword'] == ""){
-                //为编辑模式
-                try{
-                    $global_user->where('objectid',$_POST['objectid']) 
+            $res  = $global_user->where('username',$_POST['username']) 
                                 ->update([  'linkphone'     => $_POST['linkphone'],
-                                            'companyid'     => $_POST['companyid'], 
                                             'email'         => $_POST['email'],
                                             'password'      => $_POST['password'],
                                             'modifymanid'   => $userid,
                                             'modifytime'    => date("Y-m-d H:i:s")]);
-                }catch(\Exception $e){
-                        abort(500, '新增用户异常');
-                }
+            if($res){
                 $this->redirect(url('/admin/systemmanage.user/index'));
-            }else{
-                //为新增模式
-                $data = [   'username'      => $_POST['username'], 
-                            'companyid'     => $_POST['companyid'], 
-                            'password'      => $_POST['password'], 
-                            'linkphone'     => $_POST['linkphone'], 
-                            'email'         => $_POST['email'], 
-                            'createmanid'   => $userid,
-                            'createtime'    => date("Y-m-d H:i:s"),
-                            'modifymanid'   => $userid,
-                            'modifytime'    => date("Y-m-d H:i:s")
-                        ];
+            }
+        }else{
+            $this->redirect(url('/admin/systemmanage.user/index'));
+        }
+    }
+    
+    /**
+     * 增加用户
+     */
+    public function add_user() {
+        if(!empty($_POST)){
+            $common = new ComFunc();
+            $userid = $common->authcode(session('crabstudio_session_userid'), "DECODE", config('authcodeKey'), 0);
+            $global_user = db('global_user');
+            $data = [   'username'      => $_POST['username'], 
+                        'password'      => $_POST['password'], 
+                        'linkphone'     => $_POST['linkphone'], 
+                        'email'         => $_POST['email'], 
+                        'createmanid'   => $userid,
+                        'createtime'    => date("Y-m-d H:i:s"),
+                        'modifymanid'   => $userid,
+                        'modifytime'    => date("Y-m-d H:i:s")
+                    ];
+            try{
+                $resObjectid  = $global_user-> insertGetId($data);
+            }catch(\Exception $e){
+                    abort(500, '新增用户异常');
+            }
+            if($resObjectid){
+                //根据返回的用户主键值，建立对应的数据表
                 try{
-                    $global_user-> insert($data);
+                    $createDB1 = "SET FOREIGN_KEY_CHECKS=0;";
+                    Db::execute($createDB1);   
+                    $createDB2 = "DROP TABLE IF EXISTS `ms_data_history_"."$resObjectid`";
+                    Db::execute($createDB2);   
+                    $createDB3 = "CREATE TABLE `ms_data_history_".$resObjectid."` (
+                                   `objectid` bigint(20) NOT NULL AUTO_INCREMENT,
+                                    `uid` int(10) NOT NULL COMMENT '终端id标识',
+                                    `mstype` int(5) NOT NULL COMMENT '终端类型',
+                                    `rawdata` varchar(100) CHARACTER SET utf8 NOT NULL COMMENT '原始数据',
+                                    `parseddata` varchar(100) CHARACTER SET utf8 NOT NULL COMMENT '解析后的数据',
+                                    `uptime` datetime NOT NULL COMMENT '上报时间',
+                                    PRIMARY KEY (`objectid`)
+                                  ) ENGINE=InnoDB DEFAULT CHARSET=latin1;";
+                    Db::execute($createDB3);
                 }catch(\Exception $e){
-                        abort(500, '新增用户异常');
+                    abort(500, '新增用户时新建历史数据表异常');
                 }
                 $this->redirect(url('/admin/systemmanage.user/index'));
             }
@@ -104,29 +129,6 @@ class User extends Index
             $this->redirect(url('/admin/systemmanage.user/index'));
         }
     }
-        //            if($resObjectid){
-    //                //根据返回的用户主键值，建立对应的数据表
-    //                try{
-    //                    $createDB1 = "SET FOREIGN_KEY_CHECKS=0;";
-    //                    Db::execute($createDB1);   
-    //                    $createDB2 = "DROP TABLE IF EXISTS `ms_data_history_"."$resObjectid`";
-    //                    Db::execute($createDB2);   
-    //                    $createDB3 = "CREATE TABLE `ms_data_history_".$resObjectid."` (
-    //                                   `objectid` bigint(20) NOT NULL AUTO_INCREMENT,
-    //                                    `uid` int(10) NOT NULL COMMENT '终端id标识',
-    //                                    `mstype` int(5) NOT NULL COMMENT '终端类型',
-    //                                    `rawdata` varchar(100) CHARACTER SET utf8 NOT NULL COMMENT '原始数据',
-    //                                    `parseddata` varchar(100) CHARACTER SET utf8 NOT NULL COMMENT '解析后的数据',
-    //                                    `uptime` datetime NOT NULL COMMENT '上报时间',
-    //                                    PRIMARY KEY (`objectid`)
-    //                                  ) ENGINE=InnoDB DEFAULT CHARSET=latin1;";
-    //                    Db::execute($createDB3);
-    //                }catch(\Exception $e){
-    //                    abort(500, '新增用户时新建历史数据表异常');
-    //                }
-    //                $this->redirect(url('/admin/systemmanage.user/index'));
-    //            }
-
     
     /**
      * 增加用户时校验用户名是否重复
@@ -172,8 +174,19 @@ class User extends Index
         }
     }
     
-    public function set_user_tree() {
-        
+    public function set_company_tree() {
+        //sql语句,需要排除objectid为-1的无效行
+        $s1 = " SELECT 
+                    objectid as id,
+                    parentid as pId,
+                    companyname as name,
+                    'true' as open
+                FROM 
+                    global_company
+                WHERE 
+                    objectid <> -1";
+        $companyList = Db::query($s1);
+        return json($companyList);
     }
     
  

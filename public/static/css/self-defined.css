@@ -58,11 +58,11 @@
 }
 
 /**用户管理编辑弹出层样式**/
-.editUserDiv{width:500px;color:#fff;color:#444;background:#fff;box-shadow:1px 2px 2px #555;display:none;}
-.editUserDiv h4{height:26px;line-height:26px;overflow:hidden;background:#2A3F54;color:#fff;padding:0 10px;border:1px solid #2A3F54;font-size:14px;}
-.editUserDiv h4 a{width:14px;line-height:13px;_line-height:15px;height:13px;font-family:arial;overflow:hidden;display:block;background:#fff;color:#c77405;float:right;text-align:center;text-decoration:none;margin-top:7px;font-size:14px;font-weight:normal;border-radius:2px;_font-size:12px;}
-.editUserDiv p{padding:30px 10px;font-size:13px;border:1px solid #ccc;text-align: center}
-.editUserForm-button{text-align:center}
+.addEditUserDiv{width:550px;color:#fff;color:#444;background:#fff;box-shadow:1px 2px 2px #555;display:none;}
+.addEditUserDiv h4{height:26px;line-height:26px;overflow:hidden;background:#2A3F54;color:#fff;padding:0 10px;border:1px solid #2A3F54;font-size:14px;}
+.addEditUserDiv h4 a{width:14px;line-height:13px;_line-height:15px;height:13px;font-family:arial;overflow:hidden;display:block;background:#fff;color:#c77405;float:right;text-align:center;text-decoration:none;margin-top:7px;font-size:14px;font-weight:normal;border-radius:2px;_font-size:12px;}
+.addEditUserDiv p{padding:30px 10px;font-size:13px;border:1px solid #ccc;text-align: center}
+.addEditUserDiv-button{text-align:center}
 
 /**删除用户弹出确认confirm样式**/
 .deleteUserDiv{width:280px;color:#fff;color:#444;background:#fff;box-shadow:1px 2px 2px #555;display:none;}

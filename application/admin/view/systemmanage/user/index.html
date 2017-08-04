@@ -18,6 +18,8 @@
 <link rel="stylesheet" type="text/css" href="{$Think.config.__CSS__}GridManager.css">
 <!--bootstrapValidator校验样式-->
 <link rel="stylesheet" type="text/css" href="{$Think.config.__CSS__}bootstrapValidator.css">
+<!--ztree样式-->
+<link rel="stylesheet" type="text/css" href="{$Think.config.__CSS__}zTreeMetroStyle.css">
 <!--自己添加的样式-->
 <link href="{$Think.config.__CSS__}self-defined.css" rel="stylesheet">
 
@@ -48,107 +50,67 @@
                             </div>
                     </div>
                     <br/>
-                    <button class="btn btn-default btn-sm" onclick="addUser()"><i class="fa fa-plus"></i> 新增</button>
+                    <button class="btn btn-default btn-sm" onclick="addOrEditUser()"><i class="fa fa-plus"></i> 新增</button>
                     <table></table>
                     <div class="clearfix">
                     </div>
 		</footer>
                 <!-- /footer content -->
-                <!-- edit user -->
-                <div class="editUserDiv" id="editUserDiv"> 
-                        <h4><a href="javascript:void(0)" title="关闭窗口" onclick="closeTip()">&times;</a>编辑用户</h4> 
+                <!-- 增加或者编辑user -->
+                <div class="addEditUserDiv" id="addEditUserDiv"> 
+                        <h4><span id="addEditUsertitle"></span><a href="javascript:void(0)" title="关闭窗口" onclick="closeTip()">&times;</a></h4> 
                         <div class="row">
                                 <div class="col-md-12 col-sm-12 col-xs-12">
                                         <div class="x_panel">
                                                 <div class="x_content">
                                                         <br/>
-                                                        <form data-parsley-validate class="form-horizontal form-label-left" action="{:url('systemmanage.user/edit_user')}" method="POST">
-                                                                <div class="form-group">
-                                                                        <label class="control-label col-md-3 col-sm-3 col-xs-12" >用户名<span class="required">*</span></label>
-                                                                        <div class="col-md-6 col-sm-6 col-xs-12">
-                                                                                <input type="text"  id="edit_username" name="username" required="required" class="form-control col-md-7 col-xs-12">
-                                                                        </div>
-                                                                </div>
-                                                                <div class="form-group">
-                                                                        <label class="control-label col-md-3 col-sm-3 col-xs-12" >密码<span class="required">*</span></label>
-                                                                        <div class="col-md-6 col-sm-6 col-xs-12">
-                                                                                <input type="text"  id="edit_password" name="password" required="required" class="form-control col-md-7 col-xs-12">
-                                                                        </div>
-                                                                </div>
-                                                                <div class="form-group">
-                                                                        <label class="control-label col-md-3 col-sm-3 col-xs-12" >联系号码<span class="required">*</span></label>
-                                                                        <div class="col-md-6 col-sm-6 col-xs-12">
-                                                                                <input type="text"  id="edit_linkphone" name="linkphone" required="required" class="form-control col-md-7 col-xs-12">
-                                                                        </div>
-                                                                </div>
-                                                                <div class="form-group">
-                                                                        <label class="control-label col-md-3 col-sm-3 col-xs-12">邮箱<span class="required">*</span></label>
-                                                                        <div class="col-md-6 col-sm-6 col-xs-12">
-                                                                                <input type="text"  id="edit_email" name="email" required="required" class="form-control col-md-7 col-xs-12">
-                                                                        </div>
-                                                                </div>
-                                                                <div class="ln_solid">
-                                                                </div>
-                                                                <div class="form-group">
-                                                                        <div class="editUserForm-button">
-                                                                                <button class="btn btn-default" type="reset">重置</button>
-                                                                                <button class="btn btn-default" type="submit">确定</button>
-                                                                        </div>
-                                                                </div>
-                                                        </form>
-                                                </div>
-                                        </div>
-                                </div>
-                        </div> 
-                </div>
-                <!-- /edit user -->
-                <!-- add user -->
-                <div class="editUserDiv" id="addUserDiv"> 
-                        <h4><a href="javascript:void(0)" title="关闭窗口" onclick="closeTip()">&times;</a>新增用户</h4> 
-                        <div class="row">
-                                <div class="col-md-12 col-sm-12 col-xs-12">
-                                        <div class="x_panel">
-                                                <div class="x_content">
-                                                        <br/>
-                                                        <form id="addUserForm" data-parsley-validate class="form-horizontal form-label-left" action="{:url('systemmanage.user/add_user')}" method="POST">
+                                                        <form id="addEditUserForm" data-parsley-validate class="form-horizontal form-label-left" action="{:url('systemmanage.user/add_edit_user')}" method="POST">
                                                                 <div class="form-group">
                                                                         <label class="control-label col-md-3 col-sm-3 col-xs-12" >用户名</label>
                                                                         <div class="col-md-6 col-sm-6 col-xs-12">
-                                                                                <input type="text"  id="add_username" name="username" required="required" class="form-control col-md-7 col-xs-12">
+                                                                                <input type="text"  id="addEdit_username" name="username" required="required" class="form-control col-md-7 col-xs-12">
+                                                                        </div>
+                                                                </div>
+                                                                <div class="form-group">
+                                                                        <label class="control-label col-md-3 col-sm-3 col-xs-12" >所属企业</label>
+                                                                        <div class="col-md-6 col-sm-6 col-xs-12">
+                                                                                <input type="text"  id="tree_company" readonly name="companyname" onclick="showMenu();" class="form-control col-md-7 col-xs-12" style="background-color: #fff"/>
+                                                                                <input type="hidden"  id="tree_companyid" name="companyid" />
                                                                         </div>
                                                                 </div>
                                                                 <div class="form-group">
                                                                         <label class="control-label col-md-3 col-sm-3 col-xs-12" >密码</label>
                                                                         <div class="col-md-6 col-sm-6 col-xs-12">
-                                                                                <input type="text"  id="add_password" name="password" required="required" class="form-control col-md-7 col-xs-12">
+                                                                                <input type="text"  id="addEdit_password" name="password" required="required" class="form-control col-md-7 col-xs-12">
                                                                         </div>
                                                                 </div>
-                                                                <div class="form-group">
+                                                                <div class="form-group" id="confirmPasswordDiv" style="display: block">
                                                                         <label class="control-label col-md-3 col-sm-3 col-xs-12" >确认密码</label>
                                                                         <div class="col-md-6 col-sm-6 col-xs-12">
-                                                                                <input type="text"  id="add_confirmPassword" name="confirmPassword" required="required" class="form-control col-md-7 col-xs-12">
+                                                                                <input type="text"  id="addEdit_confirmPassword" name="confirmPassword" required="required" class="form-control col-md-7 col-xs-12">
                                                                         </div>
                                                                 </div>
                                                                 <div class="form-group">
                                                                         <label class="control-label col-md-3 col-sm-3 col-xs-12" >联系号码</label>
                                                                         <div class="col-md-6 col-sm-6 col-xs-12">
-                                                                                <input type="text"  id="add_linkphone" name="linkphone" required="required" class="form-control col-md-7 col-xs-12">
+                                                                                <input type="text"  id="addEdit_linkphone" name="linkphone" required="required" class="form-control col-md-7 col-xs-12">
                                                                         </div>
                                                                 </div>
                                                                 <div class="form-group">
                                                                         <label class="control-label col-md-3 col-sm-3 col-xs-12">邮箱</label>
                                                                         <div class="col-md-6 col-sm-6 col-xs-12">
-                                                                                <input type="text"  id="add_email" name="email" required="required" class="form-control col-md-7 col-xs-12">
+                                                                                <input type="text"  id="addEdit_email" name="email" required="required" class="form-control col-md-7 col-xs-12">
                                                                         </div>
                                                                 </div>
                                                                 <div class="ln_solid">
                                                                 </div>
                                                                 <div class="form-group">
-                                                                        <div class="editUserForm-button">
-                                                                                <button class="btn btn-default" type="reset">重置</button>
+                                                                        <div class="addEditUserDiv-button">
+                                                                                <!--<button class="btn btn-default" type="reset">重置</button>-->
                                                                                 <button class="btn btn-default" type="submit">确定</button>
                                                                         </div>
                                                                 </div>
+                                                                <input type="hidden"  id="addEdit_objectid" name="objectid" />
                                                         </form>
                                                 </div>
                                         </div>
@@ -167,7 +129,12 @@
                 </div>
 	</div>
 </div>
-
+    
+ <!--隐藏的用户关系树-->
+<div id="menuContent" class="menuContent" style="display:none; position: absolute;">
+        <ul id="treeDemo" class="ztree" style="margin-top:0; width:216px; height: 180px;"></ul>
+</div>
+ 
 <!--注意文件引入的先后顺序,应该先引入jquery再引入bootstrap-->
 <!-- jQuery -->
 <script src="{$Think.config.__JS__}jquery.min.js"></script>
@@ -185,6 +152,41 @@
 <script src="{$Think.config.__JS__}easydialog.min.js"></script>
 <!--bootstrao表单验证引入-->
 <script src="{$Think.config.__JS__}bootstrapValidator.js"></script>
+<!--ztree-->
+<script src="{$Think.config.__JS__}jquery.ztree.all.js"></script>
+<!--用户树-->
+<script src="{$Think.config.__JS__}company_tree/companyTreeStandard.js"></script>
+
+<script type="text/javascript">
+    window.onload=function(){ 
+        var userTreeStandardSetting = {	
+            view: {
+                    dblClickExpand: false
+            },
+            data: {
+                    simpleData: {
+                            enable: true
+                    }
+            },
+            callback: {
+                    beforeClick: beforeClick,
+                    onClick: onClick
+            }
+        };
+        
+        var userTreeStandardZNodes = [];
+        $.ajax({
+            type: 'POST',
+            async : false, // 注意此处需要同步,锁住浏览器，其它操作必须等待请求完成才可以执行
+            url: "{:url('admin/systemmanage.company/set_company_tree')}",
+            success: function(data){
+                userTreeStandardZNodes = data;
+            }
+        });
+        //用户树    
+        $.fn.zTree.init($("#treeDemo"), userTreeStandardSetting, userTreeStandardZNodes);
+    }
+</script>
 
 <script type="text/javascript">
 	var table = document.querySelector('table');
@@ -208,6 +210,10 @@
 				width: '100px',
 				text: '用户名',
 				sorting: ''
+			},{
+				key: 'companyname',
+                                width: '110px',
+				text: '所属企业'
 			},{
 				key: 'linkphone',
                                 width: '110px',
@@ -245,7 +251,7 @@
 				width: '10%',
 				text: '操作',
 				template: function(action, rowObject){
-					return "<span class='plugin-action edit-action' learnLink-id='"+rowObject.objectid+"' onclick='editUser("+JSON.stringify(rowObject)+")'>编辑</span>"
+					return "<span class='plugin-action edit-action' learnLink-id='"+rowObject.objectid+"' onclick='addOrEditUser("+JSON.stringify(rowObject)+")'>编辑</span>"
 							+"<span class='plugin-action edit-action' learnLink-id='"+rowObject.objectid+"' onclick='deleteUser("+JSON.stringify(rowObject)+")'>删除</span>";
 				}
 			}
@@ -305,110 +311,7 @@
 
 <script type="text/javascript">
 $(document).ready(function() {
-    $('#addUserForm')
-        .bootstrapValidator({
-            message: 'This value is not valid',
-            feedbackIcons: {
-                valid: 'glyphicon glyphicon-ok',
-                invalid: 'glyphicon glyphicon-remove',
-                validating: 'glyphicon glyphicon-refresh'
-            },
-            fields: {
-                username: {
-                    message: '用户名验证失败',
-                    validators: {
-                        notEmpty: {
-                            message: '用户名不能为空'
-                        },
-                        stringLength: {
-                            min: 6,
-                            max: 16,
-                            message: '用户名长度必须在6到16位之间'
-                        },
-                        regexp: {
-                            regexp: /^[a-zA-Z0-9_]+$/,
-                            message: '用户名只能包含大写、小写字母，数字和下划线'
-                        },
-                        callback: {
-                            message: '用户名已存在',
-                            callback: function (value, validator) {
-                                var flag = true;
-                                $.ajax({
-                                    type: 'POST',
-                                    async : false, // 注意此处需要同步,锁住浏览器，其它操作必须等待请求完成才可以执行
-                                    url: "{:url('admin/systemmanage.user/check_user_duplicate')}",
-                                    data: {
-                                        username: value
-                                    },
-                                    success: function(data){
-                                            if(data == 1){
-                                                flag = false;
-                                            }
-                                    }
-                                });
-                                return flag;
-                            }
-                        }
-                    }
-                },
-                password: {
-                    validators: {
-                        notEmpty: {
-                            message: '密码不能为空'
-                        },
-                        stringLength: {
-                            min: 6,
-                            max: 18,
-                            message: '密码必须在6到18位之间'
-                        },
-                        regexp: {
-                            regexp: /^[a-zA-Z0-9]+$/,
-                            message: '密码只能包含大写、小写字母，数字'
-                        },
-                        identical: {
-                            field: 'confirmPassword',
-                            message: '两次密码输入不一致'
-                        },
-                        different: {
-                            field: 'username',
-                            message: '密码不能为用户名'
-                        }
-                    }
-                },
-                confirmPassword: {
-                    validators: {
-                        notEmpty: {
-                            message: '确认密码不能为空'
-                        },
-                        identical: {
-                            field: 'password',
-                            message: '两次密码输入不一致'
-                        },
-                        different: {
-                            field: 'username',
-                            message: '密码不能为用户名'
-                        }
-                    }
-                },
-                linkphone: {
-                    validators: {
-                        notEmpty: {
-                            message: '联系号码不能为空'
-                        }
-                    }
-                },
-                email: {
-                    validators: {
-                        notEmpty: {
-                            message: '邮箱不能为空'
-                        },
-                        emailAddress: {
-                            message: '邮箱地址格式有误'
-                        }
-                    }
-                }
-            }
-        });
+   
         
 
 });
@@ -418,31 +321,210 @@ $(document).ready(function() {
 <script>
     
     function closeTip(){
+        //隐藏时销毁bootstrapValidator验证,待下次弹出再重新加载验证
+        $("#addEditUserForm").data('bootstrapValidator').destroy();
+        $('#addEditUserForm').data('bootstrapValidator', null);
 	easyDialog.close();
     }
     
-    function editUser(data){
-        document.getElementById("edit_username").value = data.username;
-        document.getElementById("edit_username").readOnly = true;
-        document.getElementById("edit_password").value = data.password;
-        document.getElementById("edit_linkphone").value = data.linkphone;
-        document.getElementById("edit_email").value = data.email;
-        easyDialog.open({
-            container : 'editUserDiv',
-            isOverlay : true
-        });
+    function addOrEditUser(data){
+        if(data == null){
+            //校验
+            $('#addEditUserForm')
+            .bootstrapValidator({
+                message: 'This value is not valid',
+                feedbackIcons: {
+                    valid: 'glyphicon glyphicon-ok',
+                    invalid: 'glyphicon glyphicon-remove',
+                    validating: 'glyphicon glyphicon-refresh'
+                },
+                fields: {
+                    username: {
+                        message: '用户名验证失败',
+                        validators: {
+                            notEmpty: {
+                                message: '用户名不能为空'
+                            },
+                            stringLength: {
+                                min: 6,
+                                max: 16,
+                                message: '用户名长度必须在6到16位之间'
+                            },
+                            regexp: {
+                                regexp: /^[a-zA-Z0-9_]+$/,
+                                message: '用户名只能包含大写、小写字母，数字和下划线'
+                            },
+                            callback: {
+                                message: '用户名已存在',
+                                callback: function (value, validator) {
+                                    var flag = true;
+                                    $.ajax({
+                                        type: 'POST',
+                                        async : false, // 注意此处需要同步,锁住浏览器，其它操作必须等待请求完成才可以执行
+                                        url: "{:url('admin/systemmanage.user/check_user_duplicate')}",
+                                        data: {
+                                            username: value
+                                        },
+                                        success: function(data){
+                                                if(data == 1){
+                                                    flag = false;
+                                                }
+                                        }
+                                    });
+                                    return flag;
+                                }
+                            }
+                        }
+                    },
+                    companyname: {
+                        message: '所属用户验证失败',
+                        validators: {
+                            notEmpty: {
+                                message: '所属用户不能为空'
+                            }
+                        }
+                    },
+                    password: {
+                        validators: {
+                            notEmpty: {
+                                message: '密码不能为空'
+                            },
+                            stringLength: {
+                                min: 6,
+                                max: 18,
+                                message: '密码必须在6到18位之间'
+                            },
+                            regexp: {
+                                regexp: /^[a-zA-Z0-9]+$/,
+                                message: '密码只能包含大写、小写字母，数字'
+                            },
+                            identical: {
+                                field: 'confirmPassword',
+                                message: '两次密码输入不一致'
+                            },
+                            different: {
+                                field: 'username',
+                                message: '密码不能为用户名'
+                            }
+                        }
+                    },
+                    confirmPassword: {
+                        validators: {
+                            notEmpty: {
+                                message: '确认密码不能为空'
+                            },
+                            identical: {
+                                field: 'password',
+                                message: '两次密码输入不一致'
+                            },
+                            different: {
+                                field: 'username',
+                                message: '密码不能为用户名'
+                            }
+                        }
+                    },
+                    linkphone: {
+                        validators: {
+                            notEmpty: {
+                                message: '联系号码不能为空'
+                            }
+                        }
+                    },
+                    email: {
+                        validators: {
+                            notEmpty: {
+                                message: '邮箱不能为空'
+                            },
+                            emailAddress: {
+                                message: '邮箱地址格式有误'
+                            }
+                        }
+                    }
+                }
+            });
+            //弹出层
+            easyDialog.open({
+                container : 'addEditUserDiv',
+                isOverlay : true
+            });
+            document.getElementById("addEditUsertitle").innerHTML = "新增用户";
+            document.getElementById("addEdit_username").readOnly = false;
+            document.getElementById("confirmPasswordDiv").style.display = "block"; //显示确认密码div
+            //每次新增窗口弹出时，都清空表单并清除bootstrapValidator校验
+            document.getElementById("addEditUserForm").reset();
+            $('#addEditUserForm').data('bootstrapValidator').resetForm();
+            //单独清除所属用户项
+            var cityObj = $("#tree_company");
+            cityObj.attr("value", "");
+        }else{
+            //校验
+            $('#addEditUserForm')
+            .bootstrapValidator({
+                message: 'This value is not valid',
+                feedbackIcons: {
+                    valid: 'glyphicon glyphicon-ok',
+                    invalid: 'glyphicon glyphicon-remove',
+                    validating: 'glyphicon glyphicon-refresh'
+                },
+                fields: {
+                    password: {
+                        validators: {
+                            notEmpty: {
+                                message: '密码不能为空'
+                            },
+                            stringLength: {
+                                min: 6,
+                                max: 18,
+                                message: '密码必须在6到18位之间'
+                            },
+                            regexp: {
+                                regexp: /^[a-zA-Z0-9]+$/,
+                                message: '密码只能包含大写、小写字母，数字'
+                            },
+                            different: {
+                                field: 'username',
+                                message: '密码不能为用户名'
+                            }
+                        }
+                    },
+                    linkphone: {
+                        validators: {
+                            notEmpty: {
+                                message: '联系号码不能为空'
+                            }
+                        }
+                    },
+                    email: {
+                        validators: {
+                            notEmpty: {
+                                message: '邮箱不能为空'
+                            },
+                            emailAddress: {
+                                message: '邮箱地址格式有误'
+                            }
+                        }
+                    }
+                }
+            });
+            //填充输入框
+            document.getElementById("addEditUsertitle").innerHTML = "编辑用户";
+            document.getElementById("confirmPasswordDiv").style.display = "none";   //隐藏确认密码div
+            document.getElementById("addEdit_confirmPassword").value = "";//置空确认密码输入框，并以此为后台判断编辑与新增的依据
+            document.getElementById("addEdit_username").value = data.username;
+            document.getElementById("addEdit_username").readOnly = true;
+            document.getElementById("addEdit_password").value = data.password;
+            document.getElementById("addEdit_linkphone").value = data.linkphone;
+            document.getElementById("addEdit_email").value = data.email;
+            $("#tree_company").attr("value", data.companyname);
+            document.getElementById("tree_companyid").value = data.companyid;
+            document.getElementById("addEdit_objectid").value = data.objectid;
+            easyDialog.open({
+                container : 'addEditUserDiv',
+                isOverlay : true
+            });
+        }
     }
-    
-    function addUser(){
-        easyDialog.open({
-            container : 'addUserDiv',
-            isOverlay : true
-        });
-        //每次新增窗口弹出时，都清空表单并清除bootstrapValidator校验
-        document.getElementById("addUserForm").reset();
-        $('#addUserForm').data('bootstrapValidator').resetForm();
-    }
-    
+
     function deleteUser(data){
         easyDialog.open({
             container : 'deleteConfirmDiv',

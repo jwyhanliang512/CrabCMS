@@ -47,11 +47,14 @@ class Ms extends Index
                     ifnull(gms.addr, '') as msaddr,
                     gms.modifytime,
                     gms.modifymanid,
-                    guser2.username as modifyman 
+                    guser2.username as modifyman,
+                    gtype.typename  as mstypename,
+                    gtype.typeid    as mstypeid
                 FROM 
                     global_ms gms
                 INNER JOIN global_user guser1 ON gms.userid = guser1.objectid
                 INNER JOIN global_user guser2 ON gms.modifymanid = guser2.objectid
+                INNER JOIN global_typecode gtype ON gms.mstype = gtype.typeid and devicetype = 1
                 where $where ";
         $msList = Db::query($s1);
         $listSize = count($msList);
