@@ -26,7 +26,7 @@ class User extends Index
     public function get_user_list() {
         
         //$where后面where查询筛选条件初始化
-        $where = " 1=1 ";
+        $where = " a.flag <> 3 ";
         if(!empty($_POST['username'])){
             $where = $where." and a.username like '%{$_POST['username']}%' ";
         };
@@ -75,10 +75,11 @@ class User extends Index
                                             'companyid'     => $_POST['companyid'], 
                                             'email'         => $_POST['email'],
                                             'password'      => $_POST['password'],
+                                            'flag'          => 2,
                                             'modifymanid'   => $userid,
                                             'modifytime'    => date("Y-m-d H:i:s")]);
                 }catch(\Exception $e){
-                        abort(500, '新增用户异常');
+                        abort(500, '编辑用户异常');
                 }
                 $this->redirect(url('/admin/systemmanage.user/index'));
             }else{
@@ -135,13 +136,14 @@ class User extends Index
     public function check_user_duplicate() {
         if(!empty($_POST)){
             $global_user = db('global_user');
-            $useInfo = $global_user->where('username',$_POST['username'])->find();
-            //校验用户名,重复返回1，不重复返回0
+            $useInfo = $global_user ->where("username = '{$_POST["username"]}' and flag <> 3") ->find();
+            //校验用户名,需要封装好的bootstrapValidator remote校验需要的验证格式，必须是json
             if($useInfo){
-                return 1;
+                $remoteJson["valid"] = false;
             }else{
-                return 0;
+                $remoteJson["valid"] = true;
             }
+            return json($remoteJson);
         }
     }
     
@@ -153,16 +155,9 @@ class User extends Index
     public function delete_user() {
         if(!empty($_POST)){
             $global_user = db('global_user');
-            $res  = $global_user->where('objectid',$_POST['userid']) -> delete();
+            $res  = $global_user->where('objectid',$_POST['objectid']) 
+                                ->update([ 'flag' => 3]);
             if($res){
-//                try{
-//                    $createDB1 = "SET FOREIGN_KEY_CHECKS=0;";
-//                    Db::execute($createDB1);   
-//                    $createDB2 = "DROP TABLE IF EXISTS `ms_data_history_"."{$_POST['userid']}`";
-//                    Db::execute($createDB2);   
-//                }catch(\Exception $e){
-//                    abort(500, '删除用户时删除对应历史数据表异常');
-//                }
                 return 1;
             }else{
                 return 0;
@@ -170,11 +165,6 @@ class User extends Index
         }else{
             $this->redirect(url('/admin/systemmanage.user/index'));
         }
-    }
-    
-    public function set_user_tree() {
-        
-    }
-    
+    }    
  
 }

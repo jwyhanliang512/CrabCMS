@@ -58,7 +58,7 @@
                 <!-- /footer content -->
                 <!-- 增加或者编辑user -->
                 <div class="addEditUserDiv" id="addEditUserDiv"> 
-                        <h4><span id="addEditUsertitle"></span><a href="javascript:void(0)" title="关闭窗口" onclick="closeTip()">&times;</a></h4> 
+                        <h4><span id="addEditUsertitle"></span><a href="javascript:void(0)" title="关闭窗口" onclick="closeTip(1)">&times;</a></h4> 
                         <div class="row">
                                 <div class="col-md-12 col-sm-12 col-xs-12">
                                         <div class="x_panel">
@@ -66,16 +66,17 @@
                                                         <br/>
                                                         <form id="addEditUserForm" data-parsley-validate class="form-horizontal form-label-left" action="{:url('systemmanage.user/add_edit_user')}" method="POST">
                                                                 <div class="form-group">
-                                                                        <label class="control-label col-md-3 col-sm-3 col-xs-12" >用户名</label>
-                                                                        <div class="col-md-6 col-sm-6 col-xs-12">
-                                                                                <input type="text"  id="addEdit_username" name="username" required="required" class="form-control col-md-7 col-xs-12">
-                                                                        </div>
-                                                                </div>
-                                                                <div class="form-group">
                                                                         <label class="control-label col-md-3 col-sm-3 col-xs-12" >所属企业</label>
                                                                         <div class="col-md-6 col-sm-6 col-xs-12">
                                                                                 <input type="text"  id="tree_company" readonly name="companyname" onclick="showMenu();" class="form-control col-md-7 col-xs-12" style="background-color: #fff"/>
                                                                                 <input type="hidden"  id="tree_companyid" name="companyid" />
+                                                                                <input type="hidden"  id="tree_companylevelcode" name="parentlevelcode" />
+                                                                        </div>
+                                                                </div>
+                                                                <div class="form-group">
+                                                                        <label class="control-label col-md-3 col-sm-3 col-xs-12" >用户名</label>
+                                                                        <div class="col-md-6 col-sm-6 col-xs-12">
+                                                                                <input type="text"  id="addEdit_username" name="username" required="required" class="form-control col-md-7 col-xs-12">
                                                                         </div>
                                                                 </div>
                                                                 <div class="form-group">
@@ -119,18 +120,18 @@
                 </div>
                 <!-- /add user -->
                 <div class="deleteUserDiv" id="deleteConfirmDiv"> 
-                        <h4><a href="javascript:void(0)" title="关闭窗口" onclick="closeTip()">&times;</a>提示</h4> 
+                        <h4><a href="javascript:void(0)" title="关闭窗口" onclick="closeTip(0)">&times;</a>提示</h4> 
                         <p></p> 
                         <input type="hidden" />
                         <div class="deleteUserDiv-button">
                                 <button class="btn btn-default" type="reset"  onclick="confirmDeleteUser()">确定</button>
-                                <button class="btn btn-default" type="submit" onclick="closeTip()">取消</button>
+                                <button class="btn btn-default" type="submit" onclick="closeTip(0)">取消</button>
                         </div>
                 </div>
 	</div>
 </div>
     
- <!--隐藏的用户关系树-->
+ <!--隐藏的企业关系树-->
 <div id="menuContent" class="menuContent" style="display:none; position: absolute;">
         <ul id="treeDemo" class="ztree" style="margin-top:0; width:216px; height: 180px;"></ul>
 </div>
@@ -154,12 +155,12 @@
 <script src="{$Think.config.__JS__}bootstrapValidator.js"></script>
 <!--ztree-->
 <script src="{$Think.config.__JS__}jquery.ztree.all.js"></script>
-<!--用户树-->
+<!--企业树-->
 <script src="{$Think.config.__JS__}company_tree/companyTreeStandard.js"></script>
 
 <script type="text/javascript">
     window.onload=function(){ 
-        var userTreeStandardSetting = {	
+        var companyTreeStandardSetting = {	
             view: {
                     dblClickExpand: false
             },
@@ -174,27 +175,27 @@
             }
         };
         
-        var userTreeStandardZNodes = [];
+        var companyTreeStandardZNodes = [];
         $.ajax({
             type: 'POST',
-            async : false, // 注意此处需要同步,锁住浏览器，其它操作必须等待请求完成才可以执行
             url: "{:url('admin/systemmanage.company/set_company_tree')}",
             success: function(data){
-                userTreeStandardZNodes = data;
+                companyTreeStandardZNodes = data;
+                //企业树    
+                $.fn.zTree.init($("#treeDemo"), companyTreeStandardSetting, companyTreeStandardZNodes);
             }
         });
-        //用户树    
-        $.fn.zTree.init($("#treeDemo"), userTreeStandardSetting, userTreeStandardZNodes);
     }
 </script>
 
 <script type="text/javascript">
+        var height = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;   //height
 	var table = document.querySelector('table');
 	var TGM = table.GM({
 		supportRemind: true
 		,gridManagerName: 'test'
 		,isCombSorting: true
-		,height: (document.documentElement.scrollHeight -200)+'px'
+		,height: (height -200)+'px'
                 ,supportAjaxPage:true
 		,supportSorting: true
 		,disableCache: false
@@ -309,21 +310,14 @@
 	});
 </script>
 
-<script type="text/javascript">
-$(document).ready(function() {
-   
-        
-
-});
-</script>
-
-
 <script>
     
-    function closeTip(){
-        //隐藏时销毁bootstrapValidator验证,待下次弹出再重新加载验证
-        $("#addEditUserForm").data('bootstrapValidator').destroy();
-        $('#addEditUserForm').data('bootstrapValidator', null);
+    function closeTip(type){
+        if(type == 1){
+            //隐藏时销毁bootstrapValidator验证,待下次弹出再重新加载验证
+            $("#addEditUserForm").data('bootstrapValidator').destroy();
+            $('#addEditUserForm').data('bootstrapValidator', null);
+        }
 	easyDialog.close();
     }
     
@@ -345,42 +339,44 @@ $(document).ready(function() {
                             notEmpty: {
                                 message: '用户名不能为空'
                             },
-                            stringLength: {
-                                min: 6,
-                                max: 16,
-                                message: '用户名长度必须在6到16位之间'
-                            },
                             regexp: {
                                 regexp: /^[a-zA-Z0-9_]+$/,
                                 message: '用户名只能包含大写、小写字母，数字和下划线'
                             },
-                            callback: {
+                            remote: {
+                                url: "{:url('admin/systemmanage.user/check_user_duplicate')}",
                                 message: '用户名已存在',
+                                data: function() {
+                                    return {
+                                        username: $("#addEdit_username").val()
+                                    };
+                                },
+                                type: 'POST',
+                                delay:500
+                            },
+                            callback: {
+                                message: '请先选择所属企业',
                                 callback: function (value, validator) {
                                     var flag = true;
-                                    $.ajax({
-                                        type: 'POST',
-                                        async : false, // 注意此处需要同步,锁住浏览器，其它操作必须等待请求完成才可以执行
-                                        url: "{:url('admin/systemmanage.user/check_user_duplicate')}",
-                                        data: {
-                                            username: value
-                                        },
-                                        success: function(data){
-                                                if(data == 1){
-                                                    flag = false;
-                                                }
-                                        }
-                                    });
+                                    if($("#tree_company").val().length < 1){
+                                        $("#addEdit_username").val("");
+                                        flag = false;
+                                    }
                                     return flag;
                                 }
+                            },
+                            stringLength: {
+                                min: 6,
+                                max: 16,
+                                message: '用户名长度必须在6到16位之间'
                             }
                         }
                     },
                     companyname: {
-                        message: '所属用户验证失败',
+                        message: '所属企业验证失败',
                         validators: {
                             notEmpty: {
-                                message: '所属用户不能为空'
+                                message: '所属企业不能为空'
                             }
                         }
                     },
@@ -450,8 +446,7 @@ $(document).ready(function() {
             document.getElementById("addEditUsertitle").innerHTML = "新增用户";
             document.getElementById("addEdit_username").readOnly = false;
             document.getElementById("confirmPasswordDiv").style.display = "block"; //显示确认密码div
-            //每次新增窗口弹出时，都清空表单并清除bootstrapValidator校验
-            document.getElementById("addEditUserForm").reset();
+            document.getElementById("addEditUserForm").reset();//每次新增窗口弹出时，都清空表单并清除bootstrapValidator校验
             $('#addEditUserForm').data('bootstrapValidator').resetForm();
             //单独清除所属用户项
             var cityObj = $("#tree_company");
@@ -535,12 +530,13 @@ $(document).ready(function() {
     }
     
     function confirmDeleteUser(){
+        console.log(document.getElementById("deleteConfirmDiv").getElementsByTagName("input")[0].value);
         $.ajax({
             type: 'POST',
             async : false, // 注意此处需要同步,锁住浏览器，其它操作必须等待请求完成才可以执行
             url: "{:url('admin/systemmanage.user/delete_user')}",
             data: {
-                userid : document.getElementById("deleteConfirmDiv").getElementsByTagName("input")[0].value  //
+                objectid : document.getElementById("deleteConfirmDiv").getElementsByTagName("input")[0].value  //
             },
             success: function(data){
                 window.location.reload();

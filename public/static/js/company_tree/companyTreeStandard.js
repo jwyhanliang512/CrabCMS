@@ -11,16 +11,20 @@ function onClick(e, treeId, treeNode) {
         nodes = zTree.getSelectedNodes(),
         v = "";
         sid = "";
+        levelcode = "";
         nodes.sort(function compare(a,b){return a.id-b.id;});
         for (var i=0, l=nodes.length; i<l; i++) {
                 v += nodes[i].name + ",";
                 sid += nodes[i].id;
+                levelcode += nodes[i].levelcode;
         }
         if (v.length > 0 ) v = v.substring(0, v.length-1);
         var cityObj = $("#tree_company");
         cityObj.attr("value", v);
         var cityObj = $("#tree_companyid");
         cityObj.attr("value", sid);
+        var cityObj = $("#tree_companylevelcode");
+        cityObj.attr("value", levelcode);
         hideMenu();
 }
 
