@@ -5,6 +5,7 @@ namespace app\admin\controller\systemmanage;
 use think\Db;
 use app\admin\controller\Index;
 use app\common\functions\ComFunciton as ComFunc;
+use app\common\functions\UtilsFunction as UtilsFunc;
 
 class Company extends Index
 {
@@ -14,8 +15,8 @@ class Company extends Index
      * @return type
      */
     public function index(){
-        $common = new ComFunc();
-        $username = $common->authcode(session('crabstudio_session_username'), "DECODE", config('authcodeKey'), 0);
+        $commonUtils = new UtilsFunc();
+        $username = $commonUtils->authcode(session('crabstudio_session_username'), "DECODE", config('authcodeKey'), 0);
         return $this->fetch('index',[ 'username'  => $username]);
     }
     
@@ -24,11 +25,16 @@ class Company extends Index
      * @return 按照gridManager格式要求封装好的json数据
      */
     public function get_company_list() {
-        //首先获取当前用户所属的企业层级
-        $common = new ComFunc();
-        $sesson_levelcode = $common->authcode(session('crabstudio_session_user_companylevelcode'), "DECODE", config('authcodeKey'), 0);
-        //$where后面where查询筛选条件初始化
-        $where = "gcom.flag <> 3 and gcom.levelcode like concat( '$sesson_levelcode','%')  ";
+        //如果没有传入企业查询条件,获取自身企业及子企业id
+        if(empty($_POST['companyids'])){
+            $commonFun = new ComFunc();
+            $Companyids = $commonFun ->getSubsidiaryTreeByLevel("",1);
+            $jointCompanyID = $Companyids[0]['jointcompanyid'];
+            $where = "gcom.objectid in ($jointCompanyID) and gcom.flag <> 3";
+        }else{
+            $jointCompanyID = $_POST['companyids'];
+            $where = "gcom.parentid in ($jointCompanyID) and gcom.flag <> 3";
+        }        
         if(!empty($_POST['companyname'])){
             $where = $where." and gcom.companyname like '%{$_POST['companyname']}%' ";
         };
@@ -71,8 +77,8 @@ class Company extends Index
      */
     public function add_edit_company() {
         if(!empty($_POST)){
-            $common = new ComFunc();
-            $userid = $common->authcode(session('crabstudio_session_userid'), "DECODE", config('authcodeKey'), 0);
+            $commonUtils = new UtilsFunc();
+            $userid = $commonUtils->authcode(session('crabstudio_session_userid'), "DECODE", config('authcodeKey'), 0);
             $global_company = db('global_company');
             if(strlen($_POST['objectid']) > 0){
                 //为编辑模式
@@ -111,9 +117,30 @@ class Company extends Index
                             'modifytime'    => date("Y-m-d H:i:s")
                         ];
                 try{
-                    $global_company-> insert($data);
+                    $resObjectid = $global_company->insertGetId($data);
                 }catch(\Exception $e){
                         abort(500, '新增企业异常');
+                }
+                if($resObjectid){
+                    //根据返回的用户主键值，建立对应的数据表
+                    try{
+                        $createDB1 = "SET FOREIGN_KEY_CHECKS=0;";
+                        Db::execute($createDB1);   
+                        $createDB2 = "DROP TABLE IF EXISTS `ms_data_history_"."$resObjectid`";
+                        Db::execute($createDB2);   
+                        $createDB3 = "CREATE TABLE `ms_data_history_".$resObjectid."` (
+                                       `objectid` bigint(20) NOT NULL AUTO_INCREMENT,
+                                        `uid` int(10) NOT NULL COMMENT '终端id标识',
+                                        `mstype` bigint(20) NOT NULL COMMENT '终端类型',
+                                        `rawdata` varchar(100) CHARACTER SET utf8 NOT NULL COMMENT '原始数据',
+                                        `parseddata` varchar(100) CHARACTER SET utf8 NOT NULL COMMENT '解析后的数据',
+                                        `uptime` datetime NOT NULL COMMENT '上报时间',
+                                        PRIMARY KEY (`objectid`)
+                                      ) ENGINE=InnoDB DEFAULT CHARSET=latin1;";
+                        Db::execute($createDB3);
+                    }catch(\Exception $e){
+                        abort(500, '新增企业时新建历史数据表异常');
+                    } 
                 }
                 $this->redirect(url('/admin/systemmanage.company/index'));
             }
@@ -165,8 +192,8 @@ class Company extends Index
      * @return type
      */
     public function set_company_tree() {
-        $common = new ComFunc();
-        $sesson_levelcode = $common->authcode(session('crabstudio_session_user_companylevelcode'), "DECODE", config('authcodeKey'), 0);
+        $commonUtils = new UtilsFunc();
+        $sesson_levelcode = $commonUtils->authcode(session('crabstudio_session_user_companylevelcode'), "DECODE", config('authcodeKey'), 0);
         //sql语句,需要排除objectid为-1的无效行
         $s1 = " SELECT 
                     objectid as id,

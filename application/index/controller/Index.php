@@ -4,6 +4,7 @@ use think\Controller;
 use think\Db;
 
 use app\common\functions\ComFunciton as ComFunc;
+use app\common\functions\UtilsFunction as UtilsFunc;
 
 
 class Index extends controller
@@ -58,11 +59,11 @@ class Index extends controller
                 $useInfo = $res[0];
                 //校验密码
                 if($useInfo['password']===$_POST['password']){
-                    $common = new ComFunc();
-                    $sesson_username = $common ->authcode($_POST['username'], "ENCODE", config('authcodeKey'), 0);
-                    $sesson_userid   = $common ->authcode($useInfo['objectid'], "ENCODE", config('authcodeKey'), 0);
-                    $sesson_user_companyid   = $common ->authcode($useInfo['companyid'], "ENCODE", config('authcodeKey'), 0);
-                    $sesson_user_companylevelcode   = $common ->authcode($useInfo['levelcode'], "ENCODE", config('authcodeKey'), 0);
+                    $commonUtils = new UtilsFunc();
+                    $sesson_username = $commonUtils ->authcode($_POST['username'], "ENCODE", config('authcodeKey'), 0);
+                    $sesson_userid   = $commonUtils ->authcode($useInfo['objectid'], "ENCODE", config('authcodeKey'), 0);
+                    $sesson_user_companyid  = $commonUtils ->authcode($useInfo['companyid'], "ENCODE", config('authcodeKey'), 0);
+                    $sesson_user_companylevelcode = $commonUtils ->authcode($useInfo['levelcode'], "ENCODE", config('authcodeKey'), 0);
                     session('crabstudio_session_username',$sesson_username);
                     session('crabstudio_session_userid',$sesson_userid);
                     session('crabstudio_session_user_companyid',$sesson_user_companyid);
@@ -102,8 +103,8 @@ class Index extends controller
             if($useInfo){
                 //校验邮箱,注意统一为大写比较
                 if(strtoupper($useInfo['email']) === strtoupper($_POST['email'])){
-                    $common = new ComFunc();
-                    if($common -> sendEmail($_POST['email'], $_POST['username'], "密码取回 [ Crab Studio ]", '尊敬的客户，您好！您的【'.$_POST['username'].'】账号密码为【'.$useInfo['password'].'】,请您妥善保管注意泄露！ ')){
+                    $commonUtils = new UtilsFunc();
+                    if($commonUtils -> sendEmail($_POST['email'], $_POST['username'], "密码取回 [ Crab Studio ]", '尊敬的客户，您好！您的【'.$_POST['username'].'】账号密码为【'.$useInfo['password'].'】,请您妥善保管注意泄露！ ')){
                         return $this->fetch('login',[ 'flag'  => 3 ]);
                     }else{
                         return $this->fetch('login',[ 'flag'  => 2 ]);

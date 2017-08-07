@@ -4,7 +4,7 @@ namespace app\admin\controller;
 
 use think\Controller;
 use app\common\functions\ComFunciton as ComFunc;
-
+use app\common\functions\UtilsFunction as UtilsFunc;
 
 class Index extends Controller
 {
@@ -25,8 +25,8 @@ class Index extends Controller
      */
     public function index()
     {
-        $common = new ComFunc();
-        $username = $common->authcode(session('crabstudio_session_username'), "DECODE", config('authcodeKey'), 0);
+        $commonUtils = new UtilsFunc();
+        $username = $commonUtils->authcode(session('crabstudio_session_username'), "DECODE", config('authcodeKey'), 0);
         return $this->fetch('index',[ 'username'  => $username ]);
     }
 }

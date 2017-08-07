@@ -37,6 +37,12 @@
 		<footer>
                     <div class="search-area">
                             <div class="sa-ele">
+                                    <label class="se-title">所属企业:</label>
+                                    <input type="text"  id="tree_company_checkbox" readonly name="companyname" onclick="showMenuCompanyTreeCheckbox();" class="se-con" style="width:120px"/>
+                                    <input type="hidden"  id="tree_companyid_checkbox" name="companyid" />
+                                    <!--<input id="citySel" type="text" readonly value="" style="width:120px;" onclick="showMenuCompanyTree();" />-->
+                            </div>
+                            <div class="sa-ele">
                                     <label class="se-title">用户名:</label>
                                     <input class="se-con" name="username"/>
                             </div>
@@ -68,7 +74,7 @@
                                                                 <div class="form-group">
                                                                         <label class="control-label col-md-3 col-sm-3 col-xs-12" >所属企业</label>
                                                                         <div class="col-md-6 col-sm-6 col-xs-12">
-                                                                                <input type="text"  id="tree_company" readonly name="companyname" onclick="showMenu();" class="form-control col-md-7 col-xs-12" style="background-color: #fff"/>
+                                                                                <input type="text"  id="tree_company" readonly name="companyname" onclick="showMenuCompanyTree();" class="form-control col-md-7 col-xs-12" style="background-color: #fff"/>
                                                                                 <input type="hidden"  id="tree_companyid" name="companyid" />
                                                                                 <input type="hidden"  id="tree_companylevelcode" name="parentlevelcode" />
                                                                         </div>
@@ -136,6 +142,12 @@
         <ul id="treeDemo" class="ztree" style="margin-top:0; width:216px; height: 180px;"></ul>
 </div>
  
+ <!--隐藏的checkbox企业关系树-->
+<div id="menuContentCheckbox" class="menuContent" style="display:none; position: absolute;">
+        <ul id="treeDemoCheckbox" class="ztree" style="margin-top:0; width:190px; height: 180px;"></ul>
+</div>
+ 
+ 
 <!--注意文件引入的先后顺序,应该先引入jquery再引入bootstrap-->
 <!-- jQuery -->
 <script src="{$Think.config.__JS__}jquery.min.js"></script>
@@ -157,6 +169,8 @@
 <script src="{$Think.config.__JS__}jquery.ztree.all.js"></script>
 <!--企业树-->
 <script src="{$Think.config.__JS__}company_tree/companyTreeStandard.js"></script>
+<!--企业checkbox树-->
+<script src="{$Think.config.__JS__}company_tree/companyTreeCheckbox.js"></script>
 
 <script type="text/javascript">
     window.onload=function(){ 
@@ -170,8 +184,27 @@
                     }
             },
             callback: {
-                    beforeClick: beforeClick,
-                    onClick: onClick
+                    beforeClick: beforeClickCompanyTree,
+                    onClick: onClickCompanyTree
+            }
+        };
+        
+        var companyTreeCheckboxSetting  = {
+            view: {
+                dblClickExpand: false
+            },
+            check: {
+                enable: true,
+		chkboxType: { "Y": "s", "N": "" }
+            },
+            data: {
+                simpleData: {
+                    enable: true
+                }
+            },
+            callback: {
+                    beforeClick: beforeClickCompanyTreeCheckbox,
+                    onCheck: onCheckCompanyTreeCheckbox
             }
         };
         
@@ -183,6 +216,7 @@
                 companyTreeStandardZNodes = data;
                 //企业树    
                 $.fn.zTree.init($("#treeDemo"), companyTreeStandardSetting, companyTreeStandardZNodes);
+                $.fn.zTree.init($("#treeDemoCheckbox"), companyTreeCheckboxSetting, companyTreeStandardZNodes);
             }
         });
     }
@@ -298,7 +332,8 @@
 	document.querySelector('.search-action').addEventListener('click', function () {
 		var _query = {
 			username: document.querySelector('[name="username"]').value,
-			linkphone: document.querySelector('[name="linkphone"]').value
+			linkphone: document.querySelector('[name="linkphone"]').value,
+                        companyids: document.querySelector('[name="companyid"]').value
 		};
 		table.GM('setQuery', _query);
 	});
@@ -307,6 +342,14 @@
 	document.querySelector('.reset-action').addEventListener('click', function () {
 		document.querySelector('[name="username"]').value = '';
 		document.querySelector('[name="linkphone"]').value = '';
+                document.querySelector('[name="companyid"]').value = '';
+                document.querySelector('[name="companyname"]').value = '';
+                //重置企业树，取消勾选
+                var zTree = $.fn.zTree.getZTreeObj("treeDemoCheckbox");
+                var checkNodes = zTree.getCheckedNodes(true);
+                for (var i=0, l=checkNodes.length; i < l; i++) {
+                    zTree.checkNode(checkNodes[i], false, true);
+                }
 	});
 </script>
 

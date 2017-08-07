@@ -18,8 +18,11 @@
 <link rel="stylesheet" type="text/css" href="{$Think.config.__CSS__}GridManager.css">
 <!--bootstrapValidator校验样式-->
 <link rel="stylesheet" type="text/css" href="{$Think.config.__CSS__}bootstrapValidator.css">
+<!--ztree样式-->
+<link rel="stylesheet" type="text/css" href="{$Think.config.__CSS__}zTreeMetroStyle.css">
 <!--自己添加的样式-->
 <link href="{$Think.config.__CSS__}self-defined.css" rel="stylesheet">
+
 </head>
 <body class="nav-md">
 <div class="container body">
@@ -33,19 +36,26 @@
 		<footer>
                     <div class="search-area">
                             <div class="sa-ele">
-                                    <label class="se-title">设备uid:</label>
-                                    <input class="se-con" name="msuid"/>
+                                    <label class="se-title">所属企业:</label>
+                                    <input type="text"  id="tree_company_checkbox" readonly name="companyname" onclick="showMenuCompanyTreeCheckbox();" class="se-con" style="width:120px"/>
+                                    <input type="hidden"  id="tree_companyid_checkbox" name="companyid" />
+                                    <!--<input id="citySel" type="text" readonly value="" style="width:120px;" onclick="showMenuCompanyTree();" />-->
                             </div>
                             <div class="sa-ele">
-                                    <label class="se-title">所属用户:</label>
-                                    <input class="se-con" name="msusername"/>
+                                    <label class="se-title">类型:</label>
+                                    <input type="text"  id="tree_typecode_checkbox" readonly name="typecode" onclick="showMenuTypecodeTreeCheckbox();" class="se-con" />
+                                    <input type="hidden"  id="tree_typecodeid_checkbox" name="typecodeid" />
+                            </div>
+                            <div class="sa-ele">
+                                    <label class="se-title">设备uid:</label>
+                                    <input class="se-con" name="msuid"/>
                             </div>
                             <div class="sa-ele">
                                     <label class="se-title">别名:</label>
                                     <input class="se-con" name="msalias"/>
                             </div>
                             <div class="sa-ele">
-                                    <label class="se-title">地址:</label>
+                                    <label class="se-title">位置:</label>
                                     <input class="se-con" name="msaddr"/>
                             </div>
                             <div class="sa-ele">
@@ -54,14 +64,102 @@
                             </div>
                     </div>
                     <br/>
-                    <button class="btn btn-default btn-sm" onclick="addMs()"><i class="fa fa-plus"></i> 新增</button>
+                    <button class="btn btn-default btn-sm" onclick="addOrEditMs()"><i class="fa fa-plus"></i> 新增</button>
                     <table></table>
                     <div class="clearfix">
                     </div>
 		</footer>
                 <!-- /footer content -->
+                <!-- 增加或者编辑ms -->
+                <div class="addEditUserDiv" id="addEditMsDiv"> 
+                        <h4><span id="addEditMstitle"></span><a href="javascript:void(0)" title="关闭窗口" onclick="closeTip(1)">&times;</a></h4> 
+                        <div class="row">
+                                <div class="col-md-12 col-sm-12 col-xs-12">
+                                        <div class="x_panel">
+                                                <div class="x_content">
+                                                        <br/>
+                                                        <form id="addEditMsForm" data-parsley-validate class="form-horizontal form-label-left" action="{:url('devicemanage.ms/add_edit_ms')}" method="POST">
+                                                                <div class="form-group">
+                                                                        <label class="control-label col-md-3 col-sm-3 col-xs-12" >MAC</label>
+                                                                        <div class="col-md-6 col-sm-6 col-xs-12">
+                                                                                <input type="text"  id="addEdit_msuid" name="msuid" required="required" class="form-control col-md-7 col-xs-12">
+                                                                        </div>
+                                                                </div>
+                                                                <div class="form-group">
+                                                                        <label class="control-label col-md-3 col-sm-3 col-xs-12" >所属企业</label>
+                                                                        <div class="col-md-6 col-sm-6 col-xs-12">
+                                                                                <input type="text"  id="tree_company" readonly name="companyname" onclick="showMenuCompanyTree();" class="form-control col-md-7 col-xs-12" style="background-color: #fff"/>
+                                                                                <input type="hidden"  id="tree_companyid" name="companyid" />
+                                                                                <input type="hidden"  id="tree_companylevelcode" name="parentlevelcode" />
+                                                                        </div>
+                                                                </div>
+                                                                <div class="form-group">
+                                                                        <label class="control-label col-md-3 col-sm-3 col-xs-12" >类型</label>
+                                                                        <div class="col-md-6 col-sm-6 col-xs-12">
+                                                                                <input type="text"  id="tree_typecode" readonly name="typecode" onclick="showMenuTypecodeTree();" class="form-control col-md-7 col-xs-12" style="background-color: #fff" />
+                                                                                <input type="hidden"  id="tree_typecodeid" name="typecodeid" />
+                                                                        </div>
+                                                                </div>
+                                                                <div class="form-group">
+                                                                        <label class="control-label col-md-3 col-sm-3 col-xs-12" >别名</label>
+                                                                        <div class="col-md-6 col-sm-6 col-xs-12">
+                                                                                <input type="text"  id="addEdit_alias" name="alias" required="required" class="form-control col-md-7 col-xs-12">
+                                                                        </div>
+                                                                </div>
+                                                                <div class="form-group">
+                                                                        <label class="control-label col-md-3 col-sm-3 col-xs-12">位置</label>
+                                                                        <div class="col-md-6 col-sm-6 col-xs-12">
+                                                                                <input type="text"  id="addEdit_addr" name="addr" required="required" class="form-control col-md-7 col-xs-12">
+                                                                        </div>
+                                                                </div>
+                                                                <div class="ln_solid">
+                                                                </div>
+                                                                <div class="form-group">
+                                                                        <div class="addEditUserDiv-button">
+                                                                                <!--<button class="btn btn-default" type="reset">重置</button>-->
+                                                                                <button class="btn btn-default" type="submit">确定</button>
+                                                                        </div>
+                                                                </div>
+                                                                <input type="hidden"  id="addEdit_flag" name="flag" />
+                                                        </form>
+                                                </div>
+                                        </div>
+                                </div>
+                        </div> 
+                </div>
+                <!--/ 增加或者编辑ms -->
+                <div class="deleteUserDiv" id="deleteConfirmDiv"> 
+                        <h4><a href="javascript:void(0)" title="关闭窗口" onclick="closeTip(0)">&times;</a>提示</h4> 
+                        <p></p> 
+                        <input type="hidden" />
+                        <div class="deleteUserDiv-button">
+                                <button class="btn btn-default" type="reset"  onclick="confirmDeleteMs()">确定</button>
+                                <button class="btn btn-default" type="submit" onclick="closeTip(0)">取消</button>
+                        </div>
+                </div>
 	</div>
 </div>
+    
+<!--隐藏checkbox企业关系树-->
+<div id="menuContentCheckbox" class="menuContent" style="display:none; position: absolute;">
+        <ul id="treeDemoCheckbox" class="ztree" style="margin-top:0; width:190px; height: 180px;"></ul>
+</div>
+ 
+ <!--隐藏的企业关系树-->
+<div id="menuContent" class="menuContent" style="display:none; position: absolute;">
+        <ul id="treeDemo" class="ztree" style="margin-top:0; width:216px; height: 180px;"></ul>
+</div>
+
+<!--隐藏的checkbox类型树-->
+<div id="menuTypecodeCheckbox" class="menuContent" style="display:none; position: absolute;">
+        <ul id="treeTypecodeCheckbox" class="ztree" style="margin-top:0; width:190px; height: 180px;"></ul>
+</div>
+ 
+<!--隐藏的类型树-->
+<div id="menuTypecode" class="menuContent" style="display:none; position: absolute;">
+        <ul id="treeTypecode" class="ztree" style="margin-top:0; width:216px; height: 180px;"></ul>
+</div>
+
     
 <!--注意文件引入的先后顺序,应该先引入jquery再引入bootstrap-->
 <!-- jQuery -->
@@ -80,14 +178,118 @@
 <script src="{$Think.config.__JS__}easydialog.min.js"></script>
 <!--bootstrao表单验证引入-->
 <script src="{$Think.config.__JS__}bootstrapValidator.js"></script>
+<!--ztree-->
+<script src="{$Think.config.__JS__}jquery.ztree.all.js"></script>
+<!--企业checkbox树-->
+<script src="{$Think.config.__JS__}company_tree/companyTreeCheckbox.js"></script>
+<!--企业树-->
+<script src="{$Think.config.__JS__}company_tree/companyTreeStandard.js"></script>
+<!--类型checkbox树-->
+<script src="{$Think.config.__JS__}type_tree/TypecodeTreeCheckbox.js"></script>
+<!--类型树-->
+<script src="{$Think.config.__JS__}type_tree/TypecodeTreeStandard.js"></script>
 
 <script type="text/javascript">
+    window.onload=function(){ 
+        var companyTreeStandardSetting = {	
+            view: {
+                    dblClickExpand: false
+            },
+            data: {
+                    simpleData: {
+                            enable: true
+                    }
+            },
+            callback: {
+                    beforeClick: beforeClickCompanyTree,
+                    onClick: onClickCompanyTree
+            }
+        };
+        
+        var companyTreeCheckboxSetting  = {
+            view: {
+                dblClickExpand: false
+            },
+            check: {
+                enable: true,
+		chkboxType: { "Y": "s", "N": "" }
+            },
+            data: {
+                simpleData: {
+                    enable: true
+                }
+            },
+            callback: {
+                    beforeClick: beforeClickCompanyTreeCheckbox,
+                    onCheck: onCheckCompanyTreeCheckbox
+            }
+        };
+        
+        var companyTreeStandardZNodes = [];
+        $.ajax({
+            type: 'POST',
+            url: "{:url('admin/systemmanage.company/set_company_tree')}",
+            success: function(data){
+                companyTreeStandardZNodes = data;
+                //企业树    
+                $.fn.zTree.init($("#treeDemo"), companyTreeStandardSetting, companyTreeStandardZNodes);
+                $.fn.zTree.init($("#treeDemoCheckbox"), companyTreeCheckboxSetting, companyTreeStandardZNodes);
+            }
+        });
+        
+        var typecodeTreeStandardSetting = {	
+            view: {
+                    dblClickExpand: false
+            },
+            data: {
+                    simpleData: {
+                            enable: true
+                    }
+            },
+            callback: {
+                    beforeClick: beforeClickTypecodeTree,
+                    onClick: onClickTypecodeTree
+            }
+        };
+        
+        var typecodeTreeCheckboxSetting  = {
+            data: {
+                    simpleData: {
+                            enable: true
+                    }
+            },
+            check: {
+                enable: true,
+		chkboxType: { "Y": "s", "N": "" }
+            },
+            callback: {
+                    beforeClick: beforeClickTypecodeTreeCheckbox,
+                    onCheck: onCheckTypecodeTreeCheckbox
+            }
+        };
+        
+        var typecodeTreeStandardZNodes = [];
+        $.ajax({
+            type: 'POST',
+            url: "{:url('admin/datamanage.typecode/set_typecode_tree')}",
+            success: function(data){
+                typecodeTreeStandardZNodes = data;
+                //企业树    
+                $.fn.zTree.init($("#treeTypecodeCheckbox"), typecodeTreeCheckboxSetting, typecodeTreeStandardZNodes);
+                $.fn.zTree.init($("#treeTypecode"), typecodeTreeStandardSetting, typecodeTreeStandardZNodes);
+            }
+        });
+    }
+</script>
+
+<script type="text/javascript">
+        var height = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;   //height
 	var table = document.querySelector('table');
 	var TGM = table.GM({
 		supportRemind: true
 		,gridManagerName: 'test'
 		,isCombSorting: true
-		,height: (document.documentElement.scrollHeight -200)+'px'
+		,height: (height -200)+'px'
                 ,supportAjaxPage:true
 		,supportSorting: true
 		,disableCache: false
@@ -99,14 +301,14 @@
 		,pageSize:30
 		,columnData: [
                         {
-				key: 'msuid',
+				key: 'hexmsuid',
 				width: '100px',
 				text: '设备uid',
 				sorting: ''
 			},{
-				key: 'msusername',
+				key: 'companyname',
                                 width: '110px',
-				text: '所属用户',
+				text: '所属企业',
                                 sorting: ''
 			},{
 				key: 'mstypename',
@@ -115,13 +317,13 @@
                                 sorting: ''
 			},{
 				key: 'msalias',
-                                width: '170px',
+                                width: '130px',
 				text: '别名',
                                 sorting: ''
 			},{
 				key: 'msaddr',
 				width: '130px',
-				text: '地址',
+				text: '位置',
 				sorting: ''
 			},{
 				key: 'modifyman',
@@ -133,12 +335,21 @@
 				text: '修改时间',
 				sorting: ''
 			},{
+				key: 'createman',
+                                width: '90px',
+				text: '添加人'
+			},{
+				key: 'createtime',
+				width: '130px',
+				text: '添加时间',
+				sorting: ''
+			},{
 				key: 'action',
 				width: '90px',
 				text: '操作',
 				template: function(action, rowObject){
-					return "<span class='plugin-action edit-action' learnLink-id='"+rowObject.objectid+"' onclick='editUser("+JSON.stringify(rowObject)+")'>编辑</span>"
-							+"<span class='plugin-action edit-action' learnLink-id='"+rowObject.objectid+"' onclick='deleteUser("+JSON.stringify(rowObject)+")'>删除</span>";
+					return "<span class='plugin-action edit-action' learnLink-id='"+rowObject.objectid+"' onclick='addOrEditMs("+JSON.stringify(rowObject)+")'>编辑</span>"
+							+"<span class='plugin-action edit-action' learnLink-id='"+rowObject.objectid+"' onclick='deleteMs("+JSON.stringify(rowObject)+")'>删除</span>";
 				}
 			},{
 				key: 'controlword',
@@ -183,16 +394,20 @@
 		}
 	}, function(query){
 		// 渲染完成后的回调函数
-		
+		var thList = $("table tr th");
+                table.GM('hideTh', [thList[7],thList[8],thList[9],thList[10]]); 
 	});
-
+        
+        
+                
 	// 绑定搜索事件
 	document.querySelector('.search-action').addEventListener('click', function () {
 		var _query = {
 			msuid: document.querySelector('[name="msuid"]').value,
                         msaddr: document.querySelector('[name="msaddr"]').value,
 			msalias: document.querySelector('[name="msalias"]').value,
-                        msusername: document.querySelector('[name="msusername"]').value
+                        mscompanyid: document.querySelector('[name="companyid"]').value,
+                        mstype: document.querySelector('[name="typecodeid"]').value
 		};
 		table.GM('setQuery', _query);
 	});
@@ -202,8 +417,168 @@
 		document.querySelector('[name="msuid"]').value = '';
                 document.querySelector('[name="msaddr"]').value = '';
 		document.querySelector('[name="msalias"]').value = '';
-                document.querySelector('[name="msusername"]').value = '';
+                document.querySelector('[name="companyname"]').value = '';
+                document.querySelector('[name="companyid"]').value = '';
+                document.querySelector('[name="typecode"]').value = '';
+                document.querySelector('[name="typecodeid"]').value = '';
+                //重置企业树，取消勾选
+                var zTree = $.fn.zTree.getZTreeObj("treeDemoCheckbox");
+                var checkNodes = zTree.getCheckedNodes(true);
+                for (var i=0, l=checkNodes.length; i < l; i++) {
+                    zTree.checkNode(checkNodes[i], false, true);
+                }
+                //重置类型
+                var zTree = $.fn.zTree.getZTreeObj("treeTypecodeCheckbox");
+                var checkNodes = zTree.getCheckedNodes(true);
+                for (var i=0, l=checkNodes.length; i < l; i++) {
+                    zTree.checkNode(checkNodes[i], false, true);
+                }
 	});
 </script>
+
+
+<script>
+    
+    function closeTip(type){
+        if(type == 1){
+            //隐藏时销毁bootstrapValidator验证,待下次弹出再重新加载验证
+            $("#addEditMsForm").data('bootstrapValidator').destroy();
+            $('#addEditMsForm').data('bootstrapValidator', null);
+        }
+	easyDialog.close();
+    }
+    
+    function addOrEditMs(data){
+        //校验
+        $('#addEditMsForm')
+        .bootstrapValidator({
+            message: 'This value is not valid',
+            feedbackIcons: {
+                valid: 'glyphicon glyphicon-ok',
+                invalid: 'glyphicon glyphicon-remove',
+                validating: 'glyphicon glyphicon-refresh'
+            },
+            fields: {
+                msuid: {
+                    message: 'MAC验证失败',
+                    validators: {
+                        notEmpty: {
+                            message: 'MAC不能为空'
+                        },
+                        regexp: {
+                            regexp: /^[0-9A-Fa-f]{8}$/,
+                            message: 'MAC须为8位十六进制字符'
+                        },
+                        remote: {
+                            url: "{:url('admin/devicemanage.ms/check_ms_duplicate')}",
+                            message: '该MAC已被注册',
+                            data: function() {
+                                return {
+                                    msuid: $("#addEdit_msuid").val()
+                                };
+                            },
+                            type: 'POST',
+                            delay:500
+                        }
+                    }
+                },
+                companyname: {
+                    message: '所属企业验证失败',
+                    validators: {
+                        notEmpty: {
+                            message: '所属企业不能为空'
+                        }
+                    }
+                },
+                typecode: {
+                    message: '类型验证失败',
+                    validators: {
+                        notEmpty: {
+                            message: '类型不能为空'
+                        }
+                    }
+                },
+                alias: {
+                    validators: {
+                        notEmpty: {
+                            message: '别名不能为空'
+                        },
+                        stringLength: {
+                            max: 50,
+                            message: '别名长度不可超过50位'
+                        }
+                    }
+                },
+                addr: {
+                    validators: {
+                        notEmpty: {
+                            message: '位置不能为空'
+                        },
+                        stringLength: {
+                            max: 50,
+                            message: '位置长度不可超过50位'
+                        }
+                    }
+                }
+            }
+        });
+        easyDialog.open({
+            container : 'addEditMsDiv',
+            isOverlay : true
+        });
+        if(data == null){
+            //弹出层
+            document.getElementById("addEdit_flag").value = "";
+            document.getElementById("addEditMstitle").innerHTML = "新增终端";
+            document.getElementById("addEdit_msuid").readOnly = false;
+            document.getElementById("addEditMsForm").reset();//每次新增窗口弹出时，都清空表单并清除bootstrapValidator校验
+            $('#addEditMsForm').data('bootstrapValidator').resetForm();
+            //单独清除所属企业项
+            var cityObj = $("#tree_company");
+            cityObj.attr("value", "");
+            var cityObj = $("#tree_typecode");
+            cityObj.attr("value", "");
+        }else{
+            //填充输入框
+            $('#addEditMsForm').data('bootstrapValidator').removeField('msuid');//编辑时去除mac校验
+            document.getElementById("addEdit_flag").value = 1;
+            document.getElementById("addEditMstitle").innerHTML = "编辑终端";
+            document.getElementById("addEdit_msuid").readOnly = true;
+            document.getElementById("addEdit_msuid").value = data.hexmsuid;
+            document.getElementById("addEdit_alias").value = data.msalias;
+            document.getElementById("addEdit_addr").value = data.msaddr;
+            $("#tree_company").attr("value", data.companyname);
+            document.getElementById("tree_companyid").value = data.companyid;
+            $("#tree_typecode").attr("value", data.mstypename);
+            document.getElementById("tree_typecodeid").value = data.mstypeid;
+        }
+    }
+
+    function deleteMs(data){
+        easyDialog.open({
+            container : 'deleteConfirmDiv',
+            isOverlay : true
+        });
+        document.getElementById("deleteConfirmDiv").getElementsByTagName("p")[0].innerText = "删除终端【"+ data.hexmsuid + "】?";
+        document.getElementById("deleteConfirmDiv").getElementsByTagName("input")[0].value = data.msuid;
+    }
+    
+    function confirmDeleteMs(){
+        console.log(document.getElementById("deleteConfirmDiv").getElementsByTagName("input")[0].value);
+        $.ajax({
+            type: 'POST',
+            async : false, // 注意此处需要同步,锁住浏览器，其它操作必须等待请求完成才可以执行
+            url: "{:url('admin/devicemanage.ms/delete_ms')}",
+            data: {
+                msuid : document.getElementById("deleteConfirmDiv").getElementsByTagName("input")[0].value  //
+            },
+            success: function(data){
+                window.location.reload();
+            }
+        });
+    }
+
+</script>
+
 </body>
 </html>

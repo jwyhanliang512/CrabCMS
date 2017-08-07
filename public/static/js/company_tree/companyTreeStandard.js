@@ -1,46 +1,46 @@
 
 
-function beforeClick(treeId, treeNode) {
+function beforeClickCompanyTree(treeId, treeNode) {
 //        var check = (treeNode && !treeNode.isParent);
 //        if (!check) alert("只能选择城市...");
 //        return check;
 }
 
-function onClick(e, treeId, treeNode) {
+function onClickCompanyTree(e, treeId, treeNode) {
         var zTree = $.fn.zTree.getZTreeObj("treeDemo"),
         nodes = zTree.getSelectedNodes(),
         v = "";
-        sid = "";
+        cid = "";
         levelcode = "";
         nodes.sort(function compare(a,b){return a.id-b.id;});
         for (var i=0, l=nodes.length; i<l; i++) {
                 v += nodes[i].name + ",";
-                sid += nodes[i].id;
+                cid += nodes[i].id;
                 levelcode += nodes[i].levelcode;
         }
         if (v.length > 0 ) v = v.substring(0, v.length-1);
         var cityObj = $("#tree_company");
         cityObj.attr("value", v);
         var cityObj = $("#tree_companyid");
-        cityObj.attr("value", sid);
+        cityObj.attr("value", cid);
         var cityObj = $("#tree_companylevelcode");
         cityObj.attr("value", levelcode);
-        hideMenu();
+        hideMenuCompanyTree();
 }
 
-function showMenu() {
+function showMenuCompanyTree() {
         var cityObj = $("#tree_company");
         var cityOffset = $("#tree_company").offset();
         $("#menuContent").css({left:cityOffset.left + "px", top:cityOffset.top + cityObj.outerHeight() + "px","z-index":"4000","background-color":"white","overflow":"scroll"}).slideDown("fast");
 
-        $("body").bind("mousedown", onBodyDown);
+        $("body").bind("mousedown", onBodyDownCompanyTree);
 }
-function hideMenu() {
+function hideMenuCompanyTree() {
         $("#menuContent").fadeOut("fast");
-        $("body").unbind("mousedown", onBodyDown);
+        $("body").unbind("mousedown", onBodyDownCompanyTree);
 }
-function onBodyDown(event) {
+function onBodyDownCompanyTree(event) {
         if (!(event.target.id == "menuBtn" || event.target.id == "menuContent" || $(event.target).parents("#menuContent").length>0)) {
-                hideMenu();
+                hideMenuCompanyTree();
         }
 }

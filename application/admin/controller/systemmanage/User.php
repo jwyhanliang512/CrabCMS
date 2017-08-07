@@ -5,6 +5,7 @@ namespace app\admin\controller\systemmanage;
 use think\Db;
 use app\admin\controller\Index;
 use app\common\functions\ComFunciton as ComFunc;
+use app\common\functions\UtilsFunction as UtilsFunc;
 
 class User extends Index
 {
@@ -14,8 +15,8 @@ class User extends Index
      * @return type
      */
     public function index(){
-        $common = new ComFunc();
-        $username = $common->authcode(session('crabstudio_session_username'), "DECODE", config('authcodeKey'), 0);
+        $commonUtils = new UtilsFunc();
+        $username = $commonUtils->authcode(session('crabstudio_session_username'), "DECODE", config('authcodeKey'), 0);
         return $this->fetch('index',[ 'username'  => $username]);
     }
     
@@ -24,9 +25,16 @@ class User extends Index
      * @return 按照gridManager格式要求封装好的json数据
      */
     public function get_user_list() {
-        
+        //如果没有传入企业查询条件,获取自身企业及子企业id
+        if(empty($_POST['companyids'])){
+            $commonFun = new ComFunc();
+            $Companyids = $commonFun ->getSubsidiaryTreeByLevel("",1);
+            $jointCompanyID = $Companyids[0]['jointcompanyid'];
+        }else{
+            $jointCompanyID = $_POST['companyids'];
+        }
         //$where后面where查询筛选条件初始化
-        $where = " a.flag <> 3 ";
+        $where = "a.companyid in ($jointCompanyID) and a.flag <> 3";
         if(!empty($_POST['username'])){
             $where = $where." and a.username like '%{$_POST['username']}%' ";
         };
@@ -62,10 +70,13 @@ class User extends Index
         return json($result);
     }
     
+    /**
+     * 编辑或者增加用户
+     */
     public function add_edit_user() {
         if(!empty($_POST)){
-            $common = new ComFunc();
-            $userid = $common->authcode(session('crabstudio_session_userid'), "DECODE", config('authcodeKey'), 0);
+            $commonUtils = new UtilsFunc();
+            $userid = $commonUtils->authcode(session('crabstudio_session_userid'), "DECODE", config('authcodeKey'), 0);
             $global_user = db('global_user');
             if($_POST['confirmPassword'] == ""){
                 //为编辑模式

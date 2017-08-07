@@ -4,7 +4,7 @@ namespace app\admin\controller\DataManage;
 
 use think\Db;
 use app\admin\controller\Index;
-use app\common\functions\ComFunciton as ComFunc;
+use app\common\functions\UtilsFunction as UtilsFunc;
 
 class Msdata extends Index
 {
@@ -14,8 +14,8 @@ class Msdata extends Index
      * @return type
      */
     public function index() {
-        $common = new ComFunc();
-        $username = $common->authcode(session('crabstudio_session_username'), "DECODE", config('authcodeKey'), 0);
+        $commonUtils = new UtilsFunc();
+        $username = $commonUtils->authcode(session('crabstudio_session_username'), "DECODE", config('authcodeKey'), 0);
         return $this->fetch('index',[ 'username'  => $username ]);
     }    
  
