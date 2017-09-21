@@ -14,8 +14,10 @@ return [
     // | 应用设置
     // +----------------------------------------------------------------------
 
+    // 应用命名空间
+    'app_namespace'          => 'app',
     // 应用调试模式
-    'app_debug'              => true,
+    'app_debug'              => false,
     // 应用Trace
     'app_trace'              => false,
     // 应用模式状态
@@ -99,7 +101,7 @@ return [
     // 域名根，如thinkphp.cn
     'url_domain_root'        => '',
     // 是否自动转换URL中的控制器和操作名
-    'url_convert'            => false,
+    'url_convert'            => true,
     // 默认的访问控制器层
     'url_controller_layer'   => 'controller',
     // 表单请求类型伪装变量
@@ -112,6 +114,8 @@ return [
     'request_cache'          => false,
     // 请求缓存有效期
     'request_cache_expire'   => null,
+    // 全局请求缓存排除规则
+    'request_cache_except'   => [],
 
     // +----------------------------------------------------------------------
     // | 模板设置
@@ -234,28 +238,4 @@ return [
         'var_page'  => 'page',
         'list_rows' => 15,
     ],
-    
-    //*******个人新增配置*******//
-    //定义公共文件路径
-    '__JS__'   => '/CrabCMS/public/static/js/',
-    '__CSS__'  => '/CrabCMS/public/static/css/',
-    '__IMG__'  => '/CrabCMS/public/static/images/',
-    
-    //HttpException异常
-    'http_exception_template'    =>  [
-        404 =>  APP_PATH.'404.html',
-        500 =>  APP_PATH.'500.html'
-    ],
-    
-    //单独生成error 和 sql两个类型的日志文件,主日志文件中将不再包含这两个级别的日志信息
-    'log'   => [
-        'type'          => 'file', 
-        // error和sql日志单独记录
-        'apart_level'   =>  ['error','sql'],
-    ],
-    
-    //加解密的密钥
-    'authcodeKey' => "19971123"
-    //*******到此为止，为个人新增配置*******//
-    
 ];
