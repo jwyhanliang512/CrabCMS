@@ -1,0 +1,61 @@
+<div class="addEditUserDiv" id="addEditUserDiv"> 
+        <h4><span id="addEditUsertitle"></span><a href="javascript:void(0)" title="关闭窗口" onclick="closeTip(1)">&times;</a></h4> 
+        <div class="row">
+                <div class="col-md-12 col-sm-12 col-xs-12">
+                        <div class="x_panel">
+                                <div class="x_content">
+                                        <br/>
+                                        <form id="addEditUserForm" data-parsley-validate class="form-horizontal form-label-left" action="{:url('systemmanage.user/add_edit_user')}" method="POST">
+                                                <div class="form-group">
+                                                        <label class="control-label col-md-3 col-sm-3 col-xs-12" >所属企业</label>
+                                                        <div class="col-md-6 col-sm-6 col-xs-12">
+                                                                <input type="text"  id="tree_company" readonly name="companyname" onclick="showMenuCompanyTree();" class="form-control col-md-7 col-xs-12" style="background-color: #fff"/>
+                                                                <input type="hidden"  id="tree_companyid" name="companyid" />
+                                                                <input type="hidden"  id="tree_companylevelcode" name="parentlevelcode" />
+                                                        </div>
+                                                </div>
+                                                <div class="form-group">
+                                                        <label class="control-label col-md-3 col-sm-3 col-xs-12" >用户名</label>
+                                                        <div class="col-md-6 col-sm-6 col-xs-12">
+                                                                <input type="text"  id="addEdit_username" name="username" required="required" class="form-control col-md-7 col-xs-12">
+                                                        </div>
+                                                </div>
+                                                <div class="form-group">
+                                                        <label class="control-label col-md-3 col-sm-3 col-xs-12" >密码</label>
+                                                        <div class="col-md-6 col-sm-6 col-xs-12">
+                                                                <input type="text"  id="addEdit_password" name="password" required="required" class="form-control col-md-7 col-xs-12">
+                                                        </div>
+                                                </div>
+                                                <div class="form-group" id="confirmPasswordDiv" style="display: block">
+                                                        <label class="control-label col-md-3 col-sm-3 col-xs-12" >确认密码</label>
+                                                        <div class="col-md-6 col-sm-6 col-xs-12">
+                                                                <input type="text"  id="addEdit_confirmPassword" name="confirmPassword" required="required" class="form-control col-md-7 col-xs-12">
+                                                        </div>
+                                                </div>
+                                                <div class="form-group">
+                                                        <label class="control-label col-md-3 col-sm-3 col-xs-12" >联系号码</label>
+                                                        <div class="col-md-6 col-sm-6 col-xs-12">
+                                                                <input type="text"  id="addEdit_linkphone" name="linkphone" required="required" class="form-control col-md-7 col-xs-12">
+                                                        </div>
+                                                </div>
+                                                <div class="form-group">
+                                                        <label class="control-label col-md-3 col-sm-3 col-xs-12">邮箱</label>
+                                                        <div class="col-md-6 col-sm-6 col-xs-12">
+                                                                <input type="text"  id="addEdit_email" name="email" required="required" class="form-control col-md-7 col-xs-12">
+                                                        </div>
+                                                </div>
+                                                <div class="ln_solid">
+                                                </div>
+                                                <div class="form-group">
+                                                        <div class="addEditUserDiv-button">
+                                                                <!--<button class="btn btn-default" type="reset">重置</button>-->
+                                                                <button class="btn btn-default" type="submit">确定</button>
+                                                        </div>
+                                                </div>
+                                                <input type="hidden"  id="addEdit_objectid" name="objectid" />
+                                        </form>
+                                </div>
+                        </div>
+                </div>
+        </div> 
+</div>

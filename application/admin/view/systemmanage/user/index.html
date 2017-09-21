@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<!-- Meta, title, CSS, favicons, etc. -->
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="shortcut icon" href="{$Think.config.__IMG__}crabteam.jpg">
+<title>Crab Studio管理系统</title>
+<!-- Bootstrap -->
+<link href="{$Think.config.__CSS__}bootstrap.min.css" rel="stylesheet">
+<!-- Font Awesome -->
+<link href="{$Think.config.__CSS__}font-awesome.min.css" rel="stylesheet">
+<!-- Custom Theme Style -->
+<link href="{$Think.config.__CSS__}custom.min.css" rel="stylesheet">
+<!--GridManager-->
+<link rel="stylesheet" type="text/css" href="{$Think.config.__CSS__}GridManager.css">
+<!--bootstrapValidator校验样式-->
+<link rel="stylesheet" type="text/css" href="{$Think.config.__CSS__}bootstrapValidator.css">
+<!--ztree样式-->
+<link rel="stylesheet" type="text/css" href="{$Think.config.__CSS__}zTreeMetroStyle.css">
+<!--自己添加的样式-->
+<link href="{$Think.config.__CSS__}self-defined.css" rel="stylesheet">
+
+</head>
+<body class="nav-md">
+<div class="container body">
+	<div class="main_container">
+		<!-- sidebar -->
+                {include file="../application/common/html/admin/admin_left.html" /}
+		<!-- /sidebar -->	
+		<!-- top navigation -->
+                {include file="../application/common/html/admin/admin_top.html" /}
+                <!-- /top navigation -->
+                <!-- footer content -->
+		<footer>
+                    <div class="search-area">
+                            <div class="sa-ele">
+                                    <label class="se-title">所属企业:</label>
+                                    <input type="text"  id="tree_company_checkbox" readonly name="companyname" onclick="showMenuCompanyTreeCheckbox();" class="se-con" style="width:120px"/>
+                                    <input type="hidden"  id="tree_companyid_checkbox" name="companyid" />
+                                    <!--<input id="citySel" type="text" readonly value="" style="width:120px;" onclick="showMenuCompanyTree();" />-->
+                            </div>
+                            <div class="sa-ele">
+                                    <label class="se-title">用户名:</label>
+                                    <input class="se-con" name="username"/>
+                            </div>
+                            <div class="sa-ele">
+                                    <label class="se-title">联系号码:</label>
+                                    <input class="se-con" name="linkphone"/>
+                            </div>
+                            <div class="sa-ele">
+                                    <button class="search-action">搜索</button>
+                                    <button class="reset-action">重置</button>
+                            </div>
+                    </div>
+                    <br/>
+                    <button class="btn btn-default btn-sm" onclick="addOrEditUser()"><i class="fa fa-plus"></i> 新增</button>
+                    <table></table>
+                    <div class="clearfix">
+                    </div>
+		</footer>
+                <!-- /footer content -->
+                
+                <!-- 增加或者编辑user -->
+                {include file="../application/admin/view/systemmanage/user/addEditUserDiv.html" /}
+                <!-- 增加或者编辑user -->
+                
+                <!-- /add user -->
+                <div class="deleteUserDiv" id="deleteConfirmDiv"> 
+                        <h4><a href="javascript:void(0)" title="关闭窗口" onclick="closeTip(0)">&times;</a>提示</h4> 
+                        <p></p> 
+                        <input type="hidden" />
+                        <div class="deleteUserDiv-button">
+                                <button class="btn btn-default" type="reset"  onclick="confirmDeleteUser()">确定</button>
+                                <button class="btn btn-default" type="submit" onclick="closeTip(0)">取消</button>
+                        </div>
+                </div>
+	</div>
+</div>
+    
+ <!--隐藏的企业关系树-->
+<div id="menuContent" class="menuContent" style="display:none; position: absolute;">
+        <ul id="treeCompany" class="ztree" style="margin-top:0; width:216px; height: 180px;"></ul>
+</div>
+ 
+ <!--隐藏的checkbox企业关系树-->
+<div id="menuContentCheckbox" class="menuContent" style="display:none; position: absolute;">
+        <ul id="treeCompanyCheckbox" class="ztree" style="margin-top:0; width:190px; height: 180px;"></ul>
+</div>
+ 
+ 
+<!--注意文件引入的先后顺序,应该先引入jquery再引入bootstrap-->
+<!-- jQuery -->
+<script src="{$Think.config.__JS__}jquery.min.js"></script>
+<!-- Bootstrap -->
+<script src="{$Think.config.__JS__}bootstrap.min.js"></script>
+<!-- FastClick -->
+<script src="{$Think.config.__JS__}fastclick.js"></script>
+<!-- Skycons -->
+<script src="{$Think.config.__JS__}skycons.js"></script>
+<!-- Custom Theme Scripts -->
+<script src="{$Think.config.__JS__}custom.min.js"></script>
+<!--GridManager-->
+<script src="{$Think.config.__JS__}GridManager.js"></script>
+<!--弹出层-->
+<script src="{$Think.config.__JS__}easydialog.min.js"></script>
+<!--bootstrao表单验证引入-->
+<script src="{$Think.config.__JS__}bootstrapValidator.js"></script>
+<!--ztree-->
+<script src="{$Think.config.__JS__}jquery.ztree.all.js"></script>
+<!--企业树-->
+<script src="{$Think.config.__JS__}company_tree/companyTreeStandard.js"></script>
+<!--企业checkbox树-->
+<script src="{$Think.config.__JS__}company_tree/companyTreeCheckbox.js"></script>
+
+<script type="text/javascript">
+ 
+//定义这个页面的全局变量
+var currentURL = window.location.href;
+var host_index = currentURL.indexOf("index.php");
+var host_url   = currentURL.substring(0, host_index+9);
+
+</script> 
+
+<script type="text/javascript">
+    window.onload=function(){ 
+        var companyTreeStandardSetting = {	
+            view: {
+                    dblClickExpand: false
+            },
+            data: {
+                    simpleData: {
+                            enable: true
+                    }
+            },
+            callback: {
+                    beforeClick: beforeClickCompanyTree,
+                    onClick: onClickCompanyTree
+            }
+        };
+        
+        var companyTreeCheckboxSetting  = {
+            view: {
+                dblClickExpand: false
+            },
+            check: {
+                enable: true,
+		chkboxType: { "Y": "s", "N": "" }
+            },
+            data: {
+                simpleData: {
+                    enable: true
+                }
+            },
+            callback: {
+                    beforeClick: beforeClickCompanyTreeCheckbox,
+                    onCheck: onCheckCompanyTreeCheckbox
+            }
+        };
+        
+        var companyTreeStandardZNodes = [];
+        $.ajax({
+            type: 'POST',
+            url: "{:url('admin/systemmanage.company/set_company_tree')}",
+            success: function(data){
+                companyTreeStandardZNodes = data;
+                //企业树    
+                $.fn.zTree.init($("#treeCompany"), companyTreeStandardSetting, companyTreeStandardZNodes);
+                $.fn.zTree.init($("#treeCompanyCheckbox"), companyTreeCheckboxSetting, companyTreeStandardZNodes);
+            }
+        });
+    }
+</script>
+
+<!--index的表格-->
+<script src="{$Think.config.__JS__}admin/systemmanage/user/user-mainTable.js"></script>
+<!--需要的通用功能-->
+<script src="{$Think.config.__JS__}admin/systemmanage/user/user-common.js"></script>
+
+</body>
+</html>

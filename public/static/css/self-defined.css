@@ -1,0 +1,79 @@
+/*子菜单展开后，底部细线样式*/
+.child_menu-li-bottom{
+    border-bottom:1px solid #68838B;
+}
+
+/*小提示弹出层样式*/
+.hide_box{width:300px;color:#fff;color:#444;background:#fff;box-shadow:1px 2px 2px #555;display:none;}
+.hide_box h4{height:26px;line-height:26px;overflow:hidden;background:#f7b64b;color:#fff;padding:0 10px;border:1px solid #e78f08;font-size:14px;border-bottom:1px solid #eaa12a;}
+.hide_box h4 a{width:14px;line-height:13px;_line-height:15px;height:13px;font-family:arial;overflow:hidden;display:block;background:#fff;color:#c77405;float:right;text-align:center;text-decoration:none;margin-top:7px;font-size:14px;font-weight:normal;border-radius:2px;_font-size:12px;}
+.hide_box p{padding:30px 10px;font-size:13px;border:1px solid #ccc;text-align: center}
+
+/** grifManager表格样式 **/
+.plugin-action{
+    display: inline-block;
+    color: steelblue;
+    margin-right: 10px;
+    cursor: pointer;
+}
+.plugin-action:hover{
+    text-decoration:underline;
+}
+.search-area{
+        padding: 10px 20px;
+        border: 1px solid #ccc;
+        background: #efefef;
+}
+.search-area .sa-ele{
+        display: inline-block;
+        margin-right: 20px;
+        font-size: 12px;
+}
+.search-area .sa-ele .se-title{
+        display: inline-block;
+        margin-right: 10px;
+}
+.search-area .sa-ele .se-con{
+        display: inline-block;
+        width:80px;
+        height: 24px;
+        border: 1px solid #ccc;
+        padding: 0px 4px;
+        line-height: 24px;
+}
+.search-area .sa-ele .search-action, .search-area .sa-ele .reset-action{
+        display: inline-block;
+        width:50px;
+        height: 26px;
+        border: 1px solid #ccc;
+        background: #e8e8e8;
+        padding: 0px 4px;
+        line-height: 26px;
+        text-align: center;
+        cursor: pointer;
+        margin-right: 10px;
+}
+.search-area .sa-ele .search-action:hover, .search-area .sa-ele .reset-action:hover{
+        opacity: 0.7;
+}
+
+/**用户管理编辑弹出层样式**/
+.addEditUserDiv{width:550px;color:#fff;color:#444;background:#fff;box-shadow:1px 2px 2px #555;display:none;}
+.addEditUserDiv h4{height:26px;line-height:26px;overflow:hidden;background:#2A3F54;color:#fff;padding:0 10px;border:1px solid #2A3F54;font-size:14px;}
+.addEditUserDiv h4 a{width:14px;line-height:13px;_line-height:15px;height:13px;font-family:arial;overflow:hidden;display:block;background:#fff;color:#c77405;float:right;text-align:center;text-decoration:none;margin-top:7px;font-size:14px;font-weight:normal;border-radius:2px;_font-size:12px;}
+.addEditUserDiv p{padding:30px 10px;font-size:13px;border:1px solid #ccc;text-align: center}
+.addEditUserDiv-button{text-align:center}
+
+/**删除用户弹出确认confirm样式**/
+.deleteUserDiv{width:280px;color:#fff;color:#444;background:#fff;box-shadow:1px 2px 2px #555;display:none;}
+.deleteUserDiv h4{height:26px;line-height:26px;overflow:hidden;background:#2A3F54;color:#fff;padding:0 10px;border:1px solid #2A3F54;font-size:14px;}
+.deleteUserDiv h4 a{width:14px;line-height:13px;_line-height:15px;height:13px;font-family:arial;overflow:hidden;display:block;background:#fff;color:#c77405;float:right;text-align:center;text-decoration:none;margin-top:7px;font-size:14px;font-weight:normal;border-radius:2px;_font-size:12px;}
+.deleteUserDiv p{padding:20px 10px;font-size:13px;text-align: center}
+.deleteUserDiv-button{text-align:center;padding:0 0 20px 0;}
+
+/**终端数据弹框**/
+.msDataWinDiv{width:900px;color:#fff;color:#444;background:#fff;box-shadow:2px 4px 4px #555;display:none;}
+.msDataWinDiv h4{height:40px;line-height:26px;overflow:hidden;background:#2A3F54;color:#fff;padding:0 10px;border:1px solid #2A3F54;font-size:14px;}
+.msDataWinDiv h4 a{width:14px;line-height:13px;_line-height:15px;height:13px;font-family:arial;overflow:hidden;display:block;background:#fff;color:#c77405;float:right;text-align:center;text-decoration:none;margin-top:7px;font-size:14px;font-weight:normal;border-radius:2px;_font-size:12px;}
+.msDataWinDiv p{padding:20px 10px;font-size:13px;text-align: center}
+.deleteUserDiv-button{text-align:center;padding:0 0 20px 0;}

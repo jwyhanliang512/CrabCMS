@@ -1,0 +1,19 @@
+<div class="msDataWinDiv" id="msDataWinDiv"> 
+        <h4><a href="javascript:void(0)" title="关闭窗口" onclick="closeTip(2)">&times;</a>终端数据</h4> 
+        <div class="search-area">
+                <div class="sa-ele">
+                        <label class="se-title" >上报时间：</label>
+                        <input size="16" type="text" id="datetimeStart" name="datetimeStart" readonly class="form_datetime">
+                        --
+                        <input size="16" type="text" id="datetimeEnd" name="datetimeEnd" readonly class="form_datetime">
+                </div>
+                <div class="sa-ele">
+                        <button class="search-action" id="msDataWinDivSearch">搜索</button>
+                        <button class="reset-action"  id="msDataWinDivReset">重置</button>
+                </div>
+        </div>
+        <div>
+            <table grid-manager="msdataWin"></table>
+        </div>
+
+</div>

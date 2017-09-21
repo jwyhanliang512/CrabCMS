@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<!-- Meta, title, CSS, favicons, etc. -->
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="shortcut icon" href="{$Think.config.__IMG__}crabteam.jpg">
+<title>旷讯科技管理系统</title>
+<!-- Bootstrap -->
+<link href="{$Think.config.__CSS__}bootstrap.min.css" rel="stylesheet">
+<!-- Font Awesome -->
+<link href="{$Think.config.__CSS__}font-awesome.min.css" rel="stylesheet">
+<!-- Custom Theme Style -->
+<link href="{$Think.config.__CSS__}custom.min.css" rel="stylesheet">
+<!--自己添加的样式-->
+<link href="{$Think.config.__CSS__}self-defined.css" rel="stylesheet">
+</head>
+<body class="nav-md">
+<div class="container body">
+	<div class="main_container">
+		<!-- sidebar -->
+                {include file="../application/common/html/elsonic/elsonic_left.html" /}
+		<!-- /sidebar -->	
+		<!-- top navigation -->
+                {include file="../application/common/html/elsonic/elsonic_top.html" /}
+                <!-- /top navigation -->
+		<!-- footer content -->
+		<div class="search-area">
+                            <div class="sa-ele">
+                                    <label class="se-title">所属企业:</label>
+                                    <input type="text"  id="tree_company_checkbox" readonly name="companyname" onclick="showMenuCompanyTreeCheckbox();" class="se-con" style="width:120px"/>
+                                    <input type="hidden"  id="tree_companyid_checkbox" name="companyid" />
+                                    <!--<input id="citySel" type="text" readonly value="" style="width:120px;" onclick="showMenuCompanyTree();" />-->
+                            </div>
+                            <div class="sa-ele">
+                                    <label class="se-title">类型:</label>
+                                    <input type="text"  id="tree_typecode_checkbox" readonly name="typecode" onclick="showMenuTypecodeTreeCheckbox();" class="se-con" />
+                                    <input type="hidden"  id="tree_typecodeid_checkbox" name="typecodeid" />
+                            </div>
+                            <div class="sa-ele">
+                                    <label class="se-title">设备uid:</label>
+                                    <input class="se-con" name="msuid"/>
+                            </div>
+                            <div class="sa-ele">
+                                    <label class="se-title">别名:</label>
+                                    <input class="se-con" name="msalias"/>
+                            </div>
+                            <div class="sa-ele">
+                                    <label class="se-title">位置:</label>
+                                    <input class="se-con" name="msaddr"/>
+                            </div>
+                            <div class="sa-ele">
+                                    <button class="search-action">搜索</button>
+                                    <button class="reset-action">重置</button>
+                            </div>
+                    </div>
+                    <br/>
+                    <button class="btn btn-default btn-sm" onclick="addOrEditMs()"><i class="fa fa-plus"></i> 新增</button>
+                    <table grid-manager="main"></table>
+                    <div class="clearfix">
+                    </div>
+		</footer>
+                <!-- /footer content -->
+                
+                <!-- 增加或者编辑ms -->
+                {include file="../application/elsonic/view/devicemanage/elsonic_ms/addEditMsDiv.html" /}
+                <!-- /增加或者编辑ms -->
+                
+                <!--终端历史数据弹窗-->
+                {include file="../application/elsonic/view/devicemanage/elsonic_ms/msDataWinDiv.html" /}
+                <!--/终端历史数据弹窗-->
+                
+                <!--删除提示框-->
+                <div class="deleteUserDiv" id="deleteConfirmDiv"> 
+                        <h4><a href="javascript:void(0)" title="关闭窗口" onclick="closeTip(0)">&times;</a>提示</h4> 
+                        <p></p> 
+                        <input type="hidden" />
+                        <div class="deleteUserDiv-button">
+                                <button class="btn btn-default" type="reset"  onclick="confirmDeleteMs()">确定</button>
+                                <button class="btn btn-default" type="submit" onclick="closeTip(0)">取消</button>
+                        </div>
+                </div>
+	</div>
+</div>
+<!-- jQuery -->
+<script src="{$Think.config.__JS__}jquery.min.js"></script>
+<!-- Bootstrap -->
+<script src="{$Think.config.__JS__}bootstrap.min.js"></script>
+<!-- FastClick -->
+<script src="{$Think.config.__JS__}fastclick.js"></script>
+<!-- Skycons -->
+<script src="{$Think.config.__JS__}skycons.js"></script>
+<!-- Custom Theme Scripts -->
+<script src="{$Think.config.__JS__}custom.min.js"></script>
+
+
+<script type="text/javascript">
+ 
+//定义这个页面的全局变量
+var currentURL = window.location.href;
+var host_index = currentURL.indexOf("index.php");
+var host_url   = currentURL.substring(0, host_index+9);
+ 
+</script> 
+
+<script type="text/javascript">
+    $("#datetimeStart").datetimepicker({
+        format: 'yyyy-mm-dd hh:ii:ss',
+        language: 'zh-CN'
+    }).on('changeDate', function(ev){               
+            if(ev.date){  
+                $("#datetimeEnd").datetimepicker('setStartDate', new Date(ev.date.valueOf()))  
+            }else{  
+                $("#datetimeEnd").datetimepicker('setStartDate',null);  
+            }  
+          }) 
+    $("#datetimeEnd").datetimepicker({
+        format: 'yyyy-mm-dd hh:ii:ss',
+        language: 'zh-CN',
+        autoclose:true
+    }).on('changeDate', function(ev){    
+            if(ev.date){  
+                $("#datetimeStart").datetimepicker('setEndDate', new Date(ev.date.valueOf()))  
+            }else{  
+                $("#datetimeStart").datetimepicker('setEndDate',new Date());  
+            }   
+        }) ;
+</script>  
+
+
+<!--index的表格-->
+<script src="{$Think.config.__JS__}admin/devicemanage/ms/ms-mainTable.js"></script>
+<!--终端历史弹窗-->
+<script src="{$Think.config.__JS__}admin/devicemanage/ms/ms-dataWin.js"></script>
+<!--需要的通用功能-->
+<script src="{$Think.config.__JS__}admin/devicemanage/ms/ms-common.js"></script>
+
+</body>
+</html>

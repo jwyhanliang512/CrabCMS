@@ -17,7 +17,7 @@ return [
     // 应用命名空间
     'app_namespace'          => 'app',
     // 应用调试模式
-    'app_debug'              => false,
+    'app_debug'              => true,
     // 应用Trace
     'app_trace'              => false,
     // 应用模式状态
@@ -238,4 +238,27 @@ return [
         'var_page'  => 'page',
         'list_rows' => 15,
     ],
+    
+     //*******个人新增配置*******//
+    //定义公共文件路径
+    '__JS__'   => '/kunglink/public/static/js/',
+    '__CSS__'  => '/kunglink/public/static/css/',
+    '__IMG__'  => '/kunglink/public/static/images/',
+    
+    //HttpException异常
+    'http_exception_template'    =>  [
+        404 =>  APP_PATH.'404.html',
+        500 =>  APP_PATH.'500.html'
+    ],
+    
+    //单独生成error 和 sql两个类型的日志文件,主日志文件中将不再包含这两个级别的日志信息
+    'log'   => [
+        'type'          => 'file', 
+        // error和sql日志单独记录
+        'apart_level'   =>  ['error','sql'],
+    ],
+    
+    //加解密的密钥
+    'authcodeKey' => "19971123"
+    //*******到此为止，为个人新增配置*******//
 ];
